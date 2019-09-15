@@ -1,0 +1,27 @@
+{
+"master":{"roothost":"localhost","rootport":9999,"webport":9998},
+"servers":{
+        "net":{"webport":10000, 
+                "netport":1000,
+                "iswebsocket":true,
+                "name":"net",
+                "msgdistribute":{"default":"game"},
+                "remoteport":[{"rootport":20001,"rootname":"game"}],
+                "app":"net.apptest",
+                "log":"logs/net.log"},
+
+        "game":{"webport":20000, 
+                "rootport":20001,
+                "name":"game",
+                "app":"room.roomlogic",
+                "log":"logs/gamelog.log"}
+        },
+
+"db":{
+    "host":"localhost",
+    "user":"root",
+    "passwd":"111",
+    "port":3306,
+    "db":"test",
+    "charset":"utf8"}
+}

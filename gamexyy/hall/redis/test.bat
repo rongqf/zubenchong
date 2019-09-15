@@ -1,0 +1,1 @@
+start redis-server.exe redis25000.conf

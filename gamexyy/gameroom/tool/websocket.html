@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+
+
+
+<title>Testing websockets</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+var skey = '';
+
+$(document).ready(function(){
+    $.get('http://222.187.222.136:18888/api?action=login&param={"username":"xyy","password":"112233"}',function(data,status){
+      tmp = JSON.parse(data);
+      skey = tmp["data"]['skey'];
+	  document.getElementById('messages').innerHTML += '<br />'  + data;
+	  
+	  
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+});
+</script>
+
+
+</head>
+
+<body>
+
+  <div>
+
+    <input type="submit"value="Start"onclick="start()"/>
+
+  </div>
+
+  <div id="messages"></div>
+
+  <script type="text/javascript">
+
+    var webSocket = new WebSocket('ws://222.187.222.136:1000');
+
+ 
+
+    webSocket.onerror = function(event) {
+
+      onError(event);
+
+    };
+
+ 
+
+    webSocket.onopen = function(event) {
+
+      onOpen(event);
+
+    };
+
+
+    webSocket.onclose = function() { 
+    // 关闭 websocket
+        document.getElementById('messages').innerHTML
+
+        += '<br />'  + 'socket close.';
+    };
+
+
+
+    webSocket.onmessage = function(event) {
+
+      onMessage(event);
+
+    };
+
+ 
+
+    function onMessage(event) {
+
+      document.getElementById('messages').innerHTML
+
+        += '<br />'  + event.data;
+
+    }
+
+ 
+
+    function onOpen(event) {
+
+      document.getElementById('messages').innerHTML
+
+        += '<br /> Connection established';
+
+    }
+
+ 
+
+    function onError(event) {
+
+      alert(event.data);
+
+    }
+
+ 
+
+    function start() {
+
+    tmp = {'userid':666, 'skey':skey};
+    d = JSON.stringify(tmp);
+    webSocket.send('100|' + d);
+
+    return false;
+
+    }
+
+  </script>
+
+</body>
+
+</html>
