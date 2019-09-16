@@ -20,9 +20,9 @@ from interface.lib.log import logger
 
 
 
-sqlcfg = {'host':"192.168.1.36",
+sqlcfg = {'host':"127.0.0.1",
     'user':'root',
-    'passwd':'weakPasswdFWsfa989ewa',
+    'passwd':'112233',
     'db':'gamedb',
     'port':3306,
     'charset':'utf8'}
@@ -60,23 +60,26 @@ class ApiHandler(tornado.web.RequestHandler):
 		logger.info('-' * 40 + '->')
 		logger.info("%s:%s", action, param)
 
-		if param:
-			param = json.loads(param)
-		if not action in handdict:
-			ret = {'ret':1, 'desc':'action no found.'}
-		else:
-			rds = rdsmanager.get_client()
+		try:
+			if param:
+				param = json.loads(param)
+			if not action in handdict:
+				ret = {'ret':1, 'desc':'action no found.'}
+			else:
+				rds = rdsmanager.get_client()
 
-			t = time.time()
-			ret = handdict[action](param)
-			alltm = time.time() - t
-			rkey = 'hashaction:%s' % action
-			rds.hincrby(rkey, 'count', 1)
-			logger.info("%s", alltm)
-			rds.hincrbyfloat(rkey, 'time', alltm)
-			#print rds.hgetall(rkey)
-			
-		self.write(json.dumps(ret))
+				t = time.time()
+				ret = handdict[action](param)
+				alltm = time.time() - t
+				rkey = 'hashaction:%s' % action
+				rds.hincrby(rkey, 'count', 1)
+				logger.info("%s", alltm)
+				rds.hincrbyfloat(rkey, 'time', alltm)
+				#print rds.hgetall(rkey)
+				
+			self.write(json.dumps(ret))
+		except Exception as e:
+			logger.error(str(e))
 
 		logger.info('<-' + '-' * 40)
 

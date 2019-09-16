@@ -1,5 +1,6 @@
 pip install tornado
 pip install DBUtils
-pip install mysqlclient-1.4.4-cp27-cp27m-win32.whl
 pip install redis
 pip install hiredis
+pip install mysqlclient-1.4.4-cp27-cp27m-win32.whl
+https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient
