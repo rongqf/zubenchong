@@ -36,12 +36,18 @@ import interface.gamelist
 import interface.getmap
 import interface.getmapgen
 import interface.collect
+import interface.upgrade
+import interface.userinfo
+import interface.getcfg
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
 			'getmap': interface.getmap.handle,
 			'getmapgen':interface.getmapgen.handle,
 			'collect':interface.collect.handle,
+			'upgrade':interface.upgrade.handle,
+			'userinfo':interface.userinfo.handle,
+			'getconfig':interface.getcfg.handle,
 			}
 
 
@@ -60,7 +66,8 @@ class ApiHandler(tornado.web.RequestHandler):
 		logger.info('-' * 40 + '->')
 		logger.info("%s:%s", action, param)
 
-		try:
+		if True:
+		#try:
 			if param:
 				param = json.loads(param)
 			if not action in handdict:
@@ -78,8 +85,8 @@ class ApiHandler(tornado.web.RequestHandler):
 				#print rds.hgetall(rkey)
 				
 			self.write(json.dumps(ret))
-		except Exception as e:
-			logger.error(str(e))
+		#except Exception as e:
+		#	logger.error(str(e))
 
 		logger.info('<-' + '-' * 40)
 
@@ -91,12 +98,22 @@ class MainHandler(tornado.web.RequestHandler):
 class DebugInfo(tornado.web.RequestHandler):
 	def get(self):
 
+		txt = ''
 		rds = rdsmanager.get_client()
 		tmp = rds.keys('hashaction:*')
+		rst = {}
+		rst['hashaction'] = {p:rds.hgetall(p) for p in tmp}
+		txt += json.dumps(rst['hashaction'], indent=2) + '<br><br>'
 
-		rst = {p:rds.hgetall(p) for p in tmp}
+		tmp = rds.keys('hashuser:*')
+		rst['hashuser'] = {p:rds.hgetall(p) for p in tmp}
+		txt += json.dumps(rst['hashuser'], indent=2) + '<br><br>'
 
-		self.write('%s' % rst)  
+		tmp = rds.smembers('setupdateuser')
+		rst['setupdateuser'] = list(tmp)
+		txt += json.dumps(rst['setupdateuser'], indent=2) + '<br><br>'
+
+		self.write(txt)  
 		
 urlcfg = [(r"/", MainHandler),
 		  (r"/debuginfo", DebugInfo),
@@ -104,16 +121,19 @@ urlcfg = [(r"/", MainHandler),
 		  ]
 
 
-settings = {'debug' : True}
+
 define("port", default=18888, help="run on the given port", type=int)
 template_path = os.path.join(os.path.dirname(__file__), "template_path")
 static_path = os.path.join(os.path.dirname(__file__), "static")
+settings = {'debug' : True}
 
 def main():
 	
 	tornado.options.parse_command_line()
 	application = tornado.web.Application(
 		urlcfg,
+        template_path = template_path,
+        static_path = static_path,
 		**settings
 		)
 	http_server = tornado.httpserver.HTTPServer(application)

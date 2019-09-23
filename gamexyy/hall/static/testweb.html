@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+
+<title>Testing websockets</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+var skey = '';
+var userid = 0;
+
+
+$(document).ready(function(){
+    $.get('/api?action=login&param={"username":"test5","password":"112233"}',function(data,status){
+      tmp = JSON.parse(data);
+      console.log(tmp)
+      skey = tmp["data"]['skey'];
+      userid = tmp["data"]['userid']
+	  document.getElementById('messages').innerHTML += '<br />'  + data;
+	  
+	  
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+});
+
+
+function userinfo()
+{
+  var url = '/api?action=userinfo&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('userinfo').innerHTML =  data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function getconfig()
+{
+  var url = '/api?action=getconfig&param={}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getconfig').innerHTML =  data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
+function getmap()
+{
+  var url = '/api?action=getmap&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('map').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function getmapgen()
+{
+  var url = '/api?action=getmapgen&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('mapgen').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function collect(bid)
+{
+  var url = '/api?action=collect&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('collect').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function upgrade(bid)
+{
+  var url = '/api?action=upgrade&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('upgrade').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
+</script>
+
+
+</head>
+
+<body>
+
+  <div id="messages"></div>
+  <div >
+    <button onclick="userinfo()">
+      userinfo
+    </button>
+    <div id="userinfo"></div>
+
+    <button onclick="getconfig()">
+      getconfig
+    </button>
+    <div id="getconfig"></div>
+    
+
+    <button onclick="getmap()">
+      getmap
+    </button>
+    <div id="map"></div>
+
+    <button onclick="getmapgen()">
+      getmapgen
+    </button>
+    <div id="mapgen"></div>
+
+    <button onclick="collect(3)">
+      collect
+    </button>
+    <div id="collect"></div>
+
+    <button onclick="upgrade(3)">
+      upgrade
+    </button>
+    <div id="upgrade"></div>
+
+  </div>
+
+</body>
+
+</html>

@@ -1,8 +1,8 @@
-d:
+f:
 
-cd "D:\rqftest\gamexyy\hall\redis"
+cd "F:\work\zubenchong\gamexyy\hall\redis"
 start redis-server.exe redis25000.conf
 
 title gamexxy
-cd "D:\rqftest\gamexyy\hall"
-python apptest.py
+cd "F:\work\zubenchong\gamexyy\hall"
+python apptest.py runserver 0.0.0.0:18888

@@ -2,8 +2,7 @@
 
 import tornado.web
 
-from lib.RedisManager import rdsmanager
-from lib import sqlutil
+from lib import userstruct
 
 import hashlib
 import time
@@ -21,26 +20,21 @@ def handle(param):
     username = param.get('username')
     passwd = param.get('password')
     if not username or not passwd:
-        return {'ret':1, 'desc':'input null'}
-
+        return {'ret':0, 'date': {'desc':'input error'}}
     
-    tmp = sqlutil.GetOneRecordInfo('userinfo', {'username':username})
+    tmp = userstruct.read_mysql(username)
+    logger.debug(tmp)
+    if tmp and passwd == tmp.password:
+        rtmp = userstruct.read_redis(tmp.userid)
+        if rtmp:
+            tmp = rtmp
 
-    if tmp:
-        userid = tmp.get('userid')
-        salt = tmp.get('salt')
-        #passwd = md5(salt + passwd)
-        password = tmp.get('password')
-        if passwd == tmp.get('password') and userid:
-            rds = rdsmanager.get_client(userid)
-            skey = md5('%s%s%s%s' % (username, time.ctime(), salt, random.random()))
-            tmp['skey'] = skey
-            tmp['update_time'] = time.time()
-            rkey = 'hashuser:%s' % userid
-            rds.hmset(rkey, tmp)
+        skey = md5('%s%s%s' % (username, time.ctime(), random.random()))
+        tmp.skey = skey
 
-            
-            
-            ret = 1
+        userstruct.write_redis_all(tmp)
         
-    return {'ret':ret, 'data':tmp}
+        logger.debug(tmp)
+        return {'ret':1, 'data':tmp.todict()}
+
+    return {'ret':0, 'date': {'desc':'username or password error'}}

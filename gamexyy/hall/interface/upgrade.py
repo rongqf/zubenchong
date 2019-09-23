@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 
+from lib.RedisManager import rdsmanager
 
 import time
 import random
@@ -8,7 +9,6 @@ import random
 from lib.log import logger
 from lib import mapstruct
 from lib import userstruct
-from lib.RedisManager import rdsmanager
 
 	
 def handle(param):
@@ -20,28 +20,27 @@ def handle(param):
 	if userid and skey and bid:
 		tmp = userstruct.read_redis(userid)
 
-		if not tmp or tmp.skey != skey: 
+		if not tmp or tmp.skey != skey:
 			return {'ret':0, 'data':{'des': 'skey error'}}
 
 		mapdata = tmp.getmap()
 		logger.info(mapdata)
 
 		if mapdata:
-			gentmp = mapdata.getGen(bid)
-			if gentmp['genflag']:
-				mapdata.updatetime[bid] = time.time()
+			upoint = mapdata.getUpgrade(bid)
+			if upoint > 0 and tmp.gamepoint > upoint and mapdata.upgrade(bid):
 
-				logger.info('after:%s', mapdata)
+				logger.info('change point:%s', tmp.gamepoint, tmp.gamepoint - upoint)
 
 				rds = rdsmanager.get_client(userid)
 				rkey = 'hashuser:%s' % userid
 				pipe = rds.pipeline()
 				pipe.hset(rkey, 'mapdata', mapdata.tojson())
-				pipe.hincrby(rkey, 'gamepoint', gentmp['gen'])
+				pipe.hincrby(rkey, 'gamepoint', -upoint)
 				pipe.execute()
 
-				return {'ret':1, 'data':gentmp}
-			
-			return {'ret':1, 'data':gentmp}
+				userstruct.write_redis_updateuser(userid)
+				
+				return {'ret':1, 'data':mapdata.todict()}
 		
 	return {'ret':ret, 'data':{}}
