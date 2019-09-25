@@ -11,6 +11,8 @@ def handle(param):
 
 	userid = param.get('userid')
 	skey = param.get('skey')
+	otherid = param.get('otherid')
+
 	mapdata = mapstruct.MapInfo()
 	tmpgen = mapdata.getGenAll()
 	if userid and skey:
@@ -19,10 +21,20 @@ def handle(param):
 		if not tmp or tmp.skey != skey: 
 			return {'ret':0, 'data':{'des': 'skey error'}}
 
-		mapdata = tmp.getmap()
-		logger.info("%s", tmp)
-		#time.sleep(3)
-		if mapdata:
-			tmpgen = mapdata.getGenAll()
+		if not otherid:
+			mapdata = tmp.getmap()
+			logger.info("%s", tmp)
+			if mapdata:
+				tmpgen = mapdata.getGenAll()
+		else:
+			other = userstruct.read_user(otherid)
+			if not other: 
+				return {'ret':0, 'data':{'des': 'otherid error'}}
+
+			mapdata = other.getmap()
+			logger.info("%s", tmp)
+			if mapdata:
+				tmpgen = mapdata.getGenAll()
+
 		
 	return {'ret':ret, 'data':tmpgen}

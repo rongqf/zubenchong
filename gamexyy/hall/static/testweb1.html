@@ -16,7 +16,7 @@ var userid = 0;
 
 
 $(document).ready(function(){
-    $.get('/api?action=login&param={"username":"test5","password":"112233"}',function(data,status){
+    $.get('/api?action=login&param={"username":"test4","password":"112233"}',function(data,status){
       tmp = JSON.parse(data);
       console.log(tmp)
       skey = tmp["data"]['skey'];
@@ -31,9 +31,7 @@ $(document).ready(function(){
 
 function userinfo()
 {
-
-  var param = {"skey":skey, "userid":userid};
-  var url = '/api?action=userinfo&param=' + JSON.stringify(param);
+  var url = '/api?action=userinfo&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
   console.log(url);
   $.get(url, function(data,status)
   {
@@ -60,10 +58,9 @@ function getconfig()
 }
 
 
-function getmap(otherid=0)
+function getmap()
 {
-  var param = {"skey":skey, "userid":userid, "otherid":otherid};
-  var url = '/api?action=getmap&param=' + JSON.stringify(param);
+  var url = '/api?action=getmap&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
   console.log(url);
   $.get(url, function(data,status)
   {
@@ -75,10 +72,9 @@ function getmap(otherid=0)
     });
 }
 
-function getmapgen(otherid=0)
+function getmapgen()
 {
-  var param = {"skey":skey, "userid":userid, "otherid":otherid};
-  var url = '/api?action=getmapgen&param=' + JSON.stringify(param);
+  var url = '/api?action=getmapgen&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
   console.log(url);
   $.get(url, function(data,status)
   {
@@ -146,6 +142,20 @@ function attack(attackuserid, bid, attackid)
     });
 }
 
+function rank()
+{
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=rank&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('attack').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
 
 
 
@@ -199,6 +209,11 @@ function attack(attackuserid, bid, attackid)
     </button>
     <div id="attack"></div>
 
+
+    <button onclick="rank()">
+      rank
+    </button>
+    <div id="rank"></div>
 
 
   </div>

@@ -11,4 +11,8 @@ from lib import userstruct
 
 	
 def handle(param):	
-	return {'ret':1, 'data': mapstruct.buildinglevelcfg}
+	return {'ret':1, 'data': 
+			{'attackcfg': mapstruct.attackcfg,
+			'buildinglevelcfg': mapstruct.buildinglevelcfg,
+			} 
+		}

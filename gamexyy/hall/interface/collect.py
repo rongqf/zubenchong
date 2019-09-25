@@ -24,12 +24,15 @@ def handle(param):
 			return {'ret':0, 'data':{'des': 'skey error'}}
 
 		mapdata = tmp.getmap()
-		logger.info(mapdata)
+		logger.info('mapdata:%s', mapdata)
 
 		if mapdata:
 			gentmp = mapdata.getGen(bid)
+
+			logger.info('gentmp:%s', gentmp)
 			if gentmp['genflag']:
 				mapdata.updatetime[bid] = time.time()
+				mapdata.delAttack(bid)
 
 				logger.info('after:%s', mapdata)
 
@@ -38,7 +41,12 @@ def handle(param):
 				pipe = rds.pipeline()
 				pipe.hset(rkey, 'mapdata', mapdata.tojson())
 				pipe.hincrby(rkey, 'gamepoint', gentmp['gen'])
+				pipe.hincrby(rkey, 'exp', gentmp['gen'])
 				pipe.execute()
+
+				userstruct.write_redis_updateuser(userid)
+
+				logger.info('mapdata:%s', mapdata)
 
 				return {'ret':1, 'data':gentmp}
 			

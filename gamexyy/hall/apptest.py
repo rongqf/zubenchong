@@ -39,6 +39,10 @@ import interface.collect
 import interface.upgrade
 import interface.userinfo
 import interface.getcfg
+import interface.activate
+import interface.attack
+import interface.userinfoother
+import interface.rank
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
@@ -48,6 +52,10 @@ handdict = {'login': interface.login.handle,
 			'upgrade':interface.upgrade.handle,
 			'userinfo':interface.userinfo.handle,
 			'getconfig':interface.getcfg.handle,
+			'activate':interface.activate.handle,
+			'attack':interface.attack.handle,
+			'userinfoother':interface.userinfoother.handle,
+			'rank':interface.rank.handle,
 			}
 
 
