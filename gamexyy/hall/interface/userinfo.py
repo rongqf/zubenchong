@@ -6,6 +6,7 @@ from lib import userstruct
 
 import time
 import random
+import hashlib
 from lib.log import logger
 
 def md5(txt):

@@ -211,6 +211,70 @@ function acceptfriend(otherid, acode = 1)
 }
 
 
+function rank()
+{
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=rank&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('rank').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
+function getmarqueeloop()
+{
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getmarqueeloop&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getmarqueeloop').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
+function getmarqueenormal()
+{
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getmarqueenormal&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getmarqueenormal').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function changepwd(newpwd)
+{
+  var param = {"skey":skey, "userid":userid, "oldpwd":'112233', 'newpwd': newpwd};
+  var url = '/api?action=changepwd&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('changepwd').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
+
 </script>
 
 
@@ -281,6 +345,26 @@ function acceptfriend(otherid, acode = 1)
       acceptfriend
     </button>
     <div id="acceptfriend"></div>
+
+    <button onclick="rank()">
+      rank
+    </button>
+    <div id="rank"></div>
+
+    <button onclick="getmarqueeloop()">
+      getmarqueeloop
+    </button>
+    <div id="getmarqueeloop"></div>
+
+    <button onclick="getmarqueenormal()">
+      getmarqueenormal
+    </button>
+    <div id="getmarqueenormal"></div>
+
+    <button onclick="changepwd('123456')">
+      changepwd
+    </button>
+    <div id="changepwd"></div>
 
   </div>
 
