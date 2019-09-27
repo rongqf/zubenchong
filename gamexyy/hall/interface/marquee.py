@@ -16,7 +16,7 @@ marquee_normal = []
 def ontime():
 	tm = int(time.time()) - 1
 
-	for i in range(10):
+	for i in range(2):
 		userstruct.pushmarquee('msgtest:%s, %s' % (tm + 1, 1))
 
 	global marquee_normal
