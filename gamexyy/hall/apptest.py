@@ -43,6 +43,7 @@ import interface.activate
 import interface.attack
 import interface.userinfoother
 import interface.rank
+import interface.friend
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
@@ -56,6 +57,11 @@ handdict = {'login': interface.login.handle,
 			'attack':interface.attack.handle,
 			'userinfoother':interface.userinfoother.handle,
 			'rank':interface.rank.handle,
+
+			'getfriend': interface.friend.handle_getfriend,
+			'getfriendreq': interface.friend.handle_getfriendreq,
+			'addfriend': interface.friend.handle_add,
+			'acceptfriend': interface.friend.handle_accept,
 			}
 
 
@@ -91,7 +97,8 @@ class ApiHandler(tornado.web.RequestHandler):
 				logger.info("%s", alltm)
 				rds.hincrbyfloat(rkey, 'time', alltm)
 				#print rds.hgetall(rkey)
-				
+			
+			logger.info(ret)	
 			self.write(json.dumps(ret))
 		#except Exception as e:
 		#	logger.error(str(e))

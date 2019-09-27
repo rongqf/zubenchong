@@ -17,7 +17,7 @@ def handle(param):
 	userid = param.get('userid')
 	skey = param.get('skey')
 	bid = param.get('bid')
-	if userid and skey and bid:
+	if userid and skey and bid != None:
 		tmp = userstruct.read_redis(userid)
 
 		if not tmp or tmp.skey != skey:

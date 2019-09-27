@@ -149,6 +149,68 @@ function attack(attackuserid, bid, attackid)
 
 
 
+function  getfriend()
+{
+
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getfriend&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getfriend').innerHTML =  data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function getfriendreq()
+{
+
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getfriendreq&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getfriendreq').innerHTML =  data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+function addfriend(name='test10')
+{
+  var param = {"skey":skey, "userid":userid, "otherusername":name};
+  var url = '/api?action=addfriend&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('addfriend').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function acceptfriend(otherid, acode = 1)
+{
+  var param = {"skey":skey, "userid":userid, "otherid":otherid, 'acode':acode};
+  var url = '/api?action=acceptfriend&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('acceptfriend').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
 </script>
 
 
@@ -200,6 +262,25 @@ function attack(attackuserid, bid, attackid)
     <div id="attack"></div>
 
 
+
+    <button onclick="getfriend()">
+      getfriend
+    </button>
+    <div id="getfriend"></div>
+    <button onclick="getfriendreq()">
+      getfriendreq
+    </button>
+    <div id="getfriendreq"></div>
+
+    <button onclick="addfriend('test10')">
+      addfriend
+    </button>
+    <div id="addfriend"></div>
+
+    <button onclick="acceptfriend(12, 1)">
+      acceptfriend
+    </button>
+    <div id="acceptfriend"></div>
 
   </div>
 
