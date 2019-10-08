@@ -36,9 +36,9 @@ def handle(param):
 		if not userstruct.checkpwdfrt(newpwd):
 			return {'ret':0, 'data':{'des': 'newpwd format error'}}
 		
-		skey = md5('%s%s%s' % (tmp.username, time.ctime(), random.random()))
-		tmp.skey = skey
-		userstruct.write_redis_dict(userid, {'skey':skey})
+		#skey = md5('%s%s%s' % (tmp.username, time.ctime(), random.random()))
+		#tmp.skey = skey
+		#userstruct.write_redis_dict(userid, {'skey':skey})
 		sqlutil.execsqlcommit("UPDATE userinfo SET `password` = '%s' where userid = %s" % (newpwd, userid))
 
 		logger.debug(tmp)

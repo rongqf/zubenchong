@@ -31,7 +31,7 @@ def handle(param):
 			if bret:
 				tmpgen = mapdata.getGenAll()
 				userstruct.write_redis_dict(userid, {'mapdata': mapdata.tojson()})
-				return {'ret':ret, 'data':tmpgen}
+				return {'ret':1, 'data':tmpgen}
 			else:
-				return {'ret':ret, 'data': {'des': 'input error'}}
-	return {'ret':ret, 'data':{}}
+				return {'ret':0, 'data': {'des': 'input error'}}
+	return {'ret':0, 'data':{}}

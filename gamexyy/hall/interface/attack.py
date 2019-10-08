@@ -55,4 +55,4 @@ def handle(param):
 
 		return {'ret':1, 'data': {'des': 'attac ok'}}
 
-	return {'ret':ret, 'data':{'des': 'input error'}}
+	return {'ret':0, 'data':{'des': 'input error'}}

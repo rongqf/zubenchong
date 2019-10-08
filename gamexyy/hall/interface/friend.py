@@ -21,6 +21,10 @@ def handle_getfriend(param):
             return {'ret':0, 'data':{'des': 'skey error'}}
 
         dbret = friendstruct.get_friend(userid)
+
+        ftmp = []
+        for p in dbret:
+            p['title'] = userstruct.getusertitle(p['exp'])
         return {'ret':1, 'data': dbret}
 
     return {'ret':0, 'data': {'des': 'input error'}}
@@ -77,7 +81,7 @@ def handle_accept(param):
         if not tmp or tmp.skey != skey: 
             return {'ret':0, 'data':{'des': 'skey error'}}
 
-        dbret = friendstruct.acc_friend(userid, otherid, acode)
+        dbret = friendstruct.acc_friend(otherid, userid, acode)
         return {'ret':1, 'data': dbret}
 
     return {'ret':0, 'data': {'des': 'input error'}}

@@ -7,7 +7,7 @@ from lib import mapstruct
 from lib import userstruct
 
 def handle(param):
-	ret = 0
+	ret = 1
 
 	userid = param.get('userid')
 	skey = param.get('skey')

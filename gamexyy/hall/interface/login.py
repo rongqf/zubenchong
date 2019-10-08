@@ -37,4 +37,4 @@ def handle(param):
         logger.debug(tmp)
         return {'ret':1, 'data':tmp.todict()}
 
-    return {'ret':0, 'date': {'desc':'username or password error'}}
+    return {'ret':0, 'data': {'desc':'username or password error'}}
