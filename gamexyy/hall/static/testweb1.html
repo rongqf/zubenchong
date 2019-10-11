@@ -16,7 +16,7 @@ var userid = 0;
 
 
 $(document).ready(function(){
-    $.get('/api?action=login&param={"username":"test4","password":"112233"}',function(data,status){
+    $.get('/api?action=login&param={"username":"test8","password":"112233"}',function(data,status){
       tmp = JSON.parse(data);
       console.log(tmp)
       skey = tmp["data"]['skey'];
@@ -204,7 +204,7 @@ function rank()
     </button>
     <div id="activate"></div>
 
-    <button onclick="attack(7, 3, 1)">
+    <button onclick="attack(9, 3, 1)">
       attack
     </button>
     <div id="attack"></div>

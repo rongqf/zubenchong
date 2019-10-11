@@ -46,6 +46,7 @@ import interface.rank
 import interface.friend
 import interface.marquee
 import interface.changepwd
+import interface.double
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
@@ -69,6 +70,8 @@ handdict = {'login': interface.login.handle,
 			'getmarqueenormal': interface.marquee.handle_normal,
 
 			'changepwd': interface.changepwd.handle,
+
+			'double': interface.double.handle,
 			}
 
 

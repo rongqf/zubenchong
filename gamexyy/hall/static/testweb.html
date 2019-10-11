@@ -16,7 +16,7 @@ var userid = 0;
 
 
 $(document).ready(function(){
-    $.get('/api?action=login&param={"username":"test5","password":"112233"}',function(data,status){
+    $.get('/api?action=login&param={"username":"test7","password":"112233"}',function(data,status){
       tmp = JSON.parse(data);
       console.log(tmp)
       skey = tmp["data"]['skey'];
@@ -117,6 +117,21 @@ function upgrade(bid)
       //alert("数据：" + data + "\n状态：" + status);
     });
 }
+
+function double(bid)
+{
+  var url = '/api?action=double&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('double').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
 
 function activate(bid)
 {
@@ -314,6 +329,12 @@ function changepwd(newpwd)
       upgrade
     </button>
     <div id="upgrade"></div>
+
+
+    <button onclick="double(3)">
+      double
+    </button>
+    <div id="double"></div>
 
     <button onclick="activate(3)">
       activate

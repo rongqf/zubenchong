@@ -1,7 +1,7 @@
 #coding:utf8
 
 import json, time, re
-
+from tornado import ioloop
 from RedisManager import rdsmanager
 import sqlutil
 import mapstruct
@@ -10,18 +10,23 @@ logger = logging.getLogger('hell')
 
 import MySQLdb
 
-usertitle = [
-	{'exp': 1000, 'title': u'称号1'},
-	{'exp': 4000, 'title': u'称号2'},
-	{'exp': 10000, 'title': u'称号3'},
-	{'exp': 20000, 'title': u'称号4'},
-	{'exp': 50000, 'title': u'称号5'},
-	{'exp': 80000, 'title': u'称号6'},
-	{'exp': 100000, 'title': u'称号7'},
-	{'exp': 500000, 'title': u'称号8'},
-]
+usertitle = []
+def ontimeReadUserTitle():
+	tmp = sqlutil.ReadDataFromDB('usertitle')
+	tmp = list(tmp)
+	tmp.sort(key=lambda x: x['exp'])
+	global usertitle
+	usertitle = tmp
+
+	txt = json.dumps(usertitle, encoding='utf-8', ensure_ascii=False, indent=2)
+	print(txt)
+	logger.info(txt)
+
+ioloop.PeriodicCallback(ontimeReadUserTitle, 1000 * 60 * 30).start()
+ontimeReadUserTitle()
 
 def getusertitle(exp):
+	global usertitle
 	if exp < usertitle[0]['exp']:
 		#return ''
 		return 0

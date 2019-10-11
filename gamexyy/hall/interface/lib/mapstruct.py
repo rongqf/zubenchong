@@ -2,6 +2,7 @@
 
 import json, time
 from tornado import ioloop
+import sqlutil
 
 import logging
 logger = logging.getLogger('hell')
@@ -58,18 +59,40 @@ buildinglevelcfg = {
 
 
 
-
 attackcfg = {
-	1:{'attackid': 1, 'attackname': u'断水', 'cost': 100,  'attacktime': 60 * 5, 'effectpoint': 2, 'effecttime': 0},
-	2:{'attackid': 2, 'attackname': u'断网', 'cost': 120,  'attacktime': 60 * 5, 'effectpoint': 3, 'effecttime': 0},
-	3:{'attackid': 3, 'attackname': u'断电', 'cost': 200,  'attacktime': 60 * 5, 'effectpoint': 4, 'effecttime': 0},
-	4:{'attackid': 4, 'attackname': u'扔垃圾', 'cost': 150,  'attacktime': 60 * 5, 'effectpoint': 5, 'effecttime': 0},
+	1:{'attackid': 1, 'attackname': u'断水', 'cost': 100,  'attacktime': 60 * 5, 'attackpoint': 2,},
+	2:{'attackid': 2, 'attackname': u'断网', 'cost': 120,  'attacktime': 60 * 5, 'attackpoint': 3,},
+	3:{'attackid': 3, 'attackname': u'断电', 'cost': 200,  'attacktime': 60 * 5, 'attackpoint': 4,},
+	4:{'attackid': 4, 'attackname': u'扔垃圾', 'cost': 150,  'attacktime': 60 * 5, 'attackpoint': 5,},
 }
 
-def f2s():
-	pass
-ioloop.PeriodicCallback(f2s, 10000).start()
+def ontimeReadDb():
+	global attackcfg, buildinglevelcfg
 
+	tmp = sqlutil.ReadDataFromDB('attackconfig')
+	attackcfg = {}
+	for p in tmp:
+		attackcfg[p['attackid']] = p
+
+	txt = json.dumps(attackcfg, encoding='utf-8', ensure_ascii=False, indent=2)
+	print(txt)
+	logger.info(txt)
+
+
+	tmp = sqlutil.ReadDataFromDB('buildinglevelconfig')
+	buildinglevelcfg = {}
+	for p in tmp:
+		buildinglevelcfg[p['buildid']] = {}
+	for p in tmp:
+		buildinglevelcfg[p['buildid']][p['level']] = p
+
+	txt = json.dumps(buildinglevelcfg, encoding='utf-8', ensure_ascii=False, indent=2)
+	print(txt)
+	logger.info(txt)
+	
+
+ioloop.PeriodicCallback(ontimeReadDb, 1000 * 60 * 30).start()
+ontimeReadDb()
 
 def getAttacPoint(aid):
 	if aid in attackcfg:
@@ -80,22 +103,48 @@ def getAttacPoint(aid):
 class AttackItem:
 	def __init__(self):
 		self.attackid = 0
+		self.begintime = 0
 		self.attacktime = 0
 
 	def todict(self):
 		d = {
 		'attackid': self.attackid,
 		'attacktime': self.attacktime,
-		'endtime': self.attacktime
+		'begintime': self.begintime
 		}
 		return d
 
 	def updatedict(self, d):
 		if d.get('attackid'): self.attackid = d.get('attackid')
 		if d.get('attacktime'): self.attacktime = d.get('attacktime')
+		if d.get('begintime'): self.begintime = d.get('begintime')
 
 	def __repr__(self):
-		return str([self.attackid, self.attacktime])
+		return str([self.attackid, self.begintime, self.attacktime])
+
+class DoubleItem:
+	def __init__(self):
+		self.begintime = 0
+		self.validtime = 0
+
+	def valid(self):
+		return self.begintime + self.validtime > time.time()
+
+	def todict(self):
+		d = {
+		'validtime': self.validtime,
+		'begintime': self.begintime,
+		'valid': self.valid(),
+		}
+		return d
+
+	def updatedict(self, d):
+		if d.get('begintime'): self.begintime = d.get('begintime')
+		if d.get('validtime'): self.validtime = d.get('validtime')
+
+	def __repr__(self):
+		return str([self.validtime, self.begintime])
+
 
 class Builder:
 	def __init__(self):
@@ -104,6 +153,7 @@ class Builder:
 		self.state = 1
 		self.updatetime = 0
 		self.attacks = []
+		
 
 	def todict(self):
 		atmp = []
@@ -168,18 +218,25 @@ class MapInfo(object):
 		self.map = [1, 1, 2, 2, 3, 4, 5, 0, 0, 0]
 		self.buildlevel = [1, 1, 2, 2, 1, 1, 1, 0, 0, 0]
 		self.attacks = [[] for _ in range(MapSize)]
+		self.doubleinfo = [DoubleItem() for _ in range(MapSize)]
 
 	def __repr__(self):
 		return str(self.__dict__)
 
-	def getAttackDict(self):
-		atmp = []
-		for p in self.attacks:
+	def getAttackDict(self, index = -1):
+		if index == -1:
+			atmp = []
+			for p in self.attacks:
+				arr = []
+				for q in p:
+					arr.append(q.todict())
+				atmp.append(arr)
+			return atmp
+		else:
 			arr = []
-			for q in p:
+			for q in self.attacks[index]:
 				arr.append(q.todict())
-			atmp.append(arr)
-		return atmp
+			return arr
 
 	def todict(self):
 		atmp = self.getAttackDict()
@@ -189,6 +246,7 @@ class MapInfo(object):
 			'buildlevel': self.buildlevel,
 			'updatetime': self.updatetime,
 			'attacks': atmp,
+			'doubleinfo': [p.todict() for p in self.doubleinfo]
 		}
 		return d
 
@@ -215,6 +273,12 @@ class MapInfo(object):
 				for i in range(MapSize):
 					self.delAttack(i)
 
+			if d.get('doubleinfo'):
+				dinfo = d.get('doubleinfo')
+				for i in range(len(dinfo)):
+					self.doubleinfo[i].updatedict(dinfo[i])
+
+
 	def getAttackNum(self, i, tm):
 		ret = 0
 		if 0 <= i < MapSize:
@@ -225,23 +289,31 @@ class MapInfo(object):
 			if b > 0 and l > 0:
 				cfg = buildinglevelcfg[b][l]
 				for p in self.attacks[i]:
-					aendtm = p.attacktime + attackcfg[p.attackid]['attacktime']
+					aendtm = p.begintime + p.attacktime
 					if aendtm > self.updatetime[i]:
-						b = max(self.updatetime[i], p.attacktime)
+						b = max(self.updatetime[i], p.begintime)
 						e = min(aendtm, tm)
-						ret += int(e - b) * attackcfg[p.attackid]['effectpoint']
+						ret += int(e - b) * attackcfg[p.attackid]['attackpoint']
 		return ret
 
 
 	def addAttack(self, i, aid):
 		if 0 <= i < MapSize:
-			a = AttackItem()
-			a.attackid = aid
-			a.attacktime = time.time()
-
-			self.attacks[i].append(a)
+			ishas = False
+			for j in range(len(self.attacks[i])):
+				if self.attacks[i][j].attackid == aid:
+					self.attacks[i][j].attacktime += attackcfg[aid]['attacktime']
+					ishas = True
+					break
+			if not ishas:
+				a = AttackItem()
+				a.attackid = aid
+				a.begintime = time.time()
+				a.attacktime = attackcfg[aid]['attacktime']
+				self.attacks[i].append(a)
 			return True
 		return False
+
 
 	def delAttack(self, i):
 		ret = False
@@ -249,7 +321,7 @@ class MapInfo(object):
 			arr = []
 			for p in self.attacks[i]:
 				aid = p.attackid
-				if p.attacktime + attackcfg[aid]['attacktime'] > time.time():
+				if p.begintime + p.attacktime > time.time():
 					arr.append(p)
 			ret = len(arr) == len(self.attacks[i])
 			self.attacks[i] = arr
@@ -273,21 +345,24 @@ class MapInfo(object):
 				tmnow = time.time()
 				t = tmnow - u
 				if t > cfg['timeinterval'] + cfg['timedisabled']:
-					ret[i] = 0
-					retflag[i] = False
 					buildstate[i] = 0
-				elif t >= cfg['timeinterval']:
 					attackpoint[i] = self.getAttackNum(i, u + cfg['timeinterval'])
-					ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i]
+					ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i] + self.getDoubleNum(i, u + cfg['timeinterval'])
+					ret[i] = max(0, ret[i])
+					retflag[i] = True
+
+				elif t >= cfg['timeinterval']:
+					attackpoint[i] = self.getAttackNum(i, u + cfg['timeinterval'])  
+					ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i] + self.getDoubleNum(i, u + cfg['timeinterval'])
 					ret[i] = max(0, ret[i])
 					retflag[i] = True
 				else:
 					attackpoint[i] = self.getAttackNum(i, tmnow)
-					ret[i] = int(t) * cfg['generate'] - attackpoint[i]
+					ret[i] = int(t) * cfg['generate'] - attackpoint[i]  + self.getDoubleNum(i, tmnow)
 					ret[i] = max(0, ret[i])
 
 		return {'gen':ret, 'genflag':retflag, 'attackpoint':attackpoint, 'buildstate': buildstate,
-			'attacks':self.getAttackDict(),
+			'attacks':self.getAttackDict(), 'doubleinfo': [p.todict() for p in self.doubleinfo]
 		}
 
 	def getUpgrade(self, i):
@@ -296,8 +371,6 @@ class MapInfo(object):
 			l = self.buildlevel[i]
 			return buildinglevelcfg[b][l]['upgrade']
 		return 0
-
-
 
 	def upgrade(self, i):
 		if 0 <= i < MapSize:
@@ -319,6 +392,46 @@ class MapInfo(object):
 				return True
 		return False
 
+	def getDouble(self, i):
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			if b > 0 and l > 0:
+				return buildinglevelcfg[b][l]['doublecost']
+		return 0
+
+	def double(self, i):
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			if b > 0 and l > 0:
+				cfg = buildinglevelcfg[b][l]
+				logger.info("aaaaaaaaaaaaaa:%s", self.doubleinfo[i].valid())
+				if self.doubleinfo[i].valid():
+					self.doubleinfo[i].validtime += cfg['doubletime']
+				else:
+					self.doubleinfo[i].begintime = time.time()
+					self.doubleinfo[i].validtime = cfg['doubletime']
+				return True
+		return False
+
+
+	def getDoubleNum(self, i, tm):
+		ret = 0
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			u = self.updatetime[i]
+			if b > 0 and l > 0:
+				cfg = buildinglevelcfg[b][l]
+				p = self.doubleinfo[i]
+				if p.valid():
+					aendtm = p.begintime + p.validtime
+					if aendtm > self.updatetime[i]:
+						b = max(self.updatetime[i], p.begintime)
+						e = min(aendtm, tm)
+						ret = int(e - b) * cfg['generate']
+		return ret
 
 	def getGen(self, i):
 		ret = 0
@@ -330,25 +443,27 @@ class MapInfo(object):
 			l = self.buildlevel[i]
 			u = self.updatetime[i]
 
-
-
 			if b > 0 and l > 0:
 				cfg = buildinglevelcfg[b][l]
 				tmnow = time.time()
 				t = tmnow - u
 				if t > cfg['timeinterval'] + cfg['timedisabled']:
-					ret = 0
-					retflag = False
+					attackpoint = self.getAttackNum(i, u + cfg['timeinterval'])
+					ret = cfg['generate'] * cfg['timeinterval'] - attackpoint + self.getDoubleNum(i, u + cfg['timeinterval'])
+					ret = max(0, ret)
+					retflag = True
 					buildstate = 0
 				elif t >= cfg['timeinterval']:
-					attackpoint = self.getAttackNum(i, tmnow)
-					ret = cfg['generate'] * cfg['timeinterval'] - attackpoint
+					attackpoint = self.getAttackNum(i, u + cfg['timeinterval'])
+					ret = cfg['generate'] * cfg['timeinterval'] - attackpoint + self.getDoubleNum(i, u + cfg['timeinterval'])
 					ret = max(0, ret)
 					retflag = True
 				else:
 					attackpoint = self.getAttackNum(i, tmnow)
-					ret = int(t) * cfg['generate'] - attackpoint
+					ret = int(t) * cfg['generate'] - attackpoint + self.getDoubleNum(i, tmnow)
 					ret = max(0, ret)
 
-		return {'gen':ret, 'genflag':retflag, 'attackpoint': attackpoint, 'buildstate': buildstate}
+		return {'gen':ret, 'genflag':retflag, 'attackpoint': attackpoint, 'buildstate': buildstate,
+			'attacks':self.getAttackDict(i), 'doubleinfo': self.doubleinfo[i].todict(),
+		}
 
