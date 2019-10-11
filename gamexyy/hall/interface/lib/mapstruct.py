@@ -215,6 +215,7 @@ class MapInfo(object):
 		self.map = [0 for _ in range(MapSize)]
 		self.buildlevel = [0 for _ in range(MapSize)]
 		self.updatetime = [time.time() for _ in range(MapSize)]
+		self.buildstate = [1 for _ in range(MapSize)]
 
 		self.map = [1, 1, 2, 2, 3, 4, 5, 0, 0, 0]
 		self.buildlevel = [1, 1, 2, 2, 1, 1, 1, 0, 0, 0]
@@ -246,6 +247,7 @@ class MapInfo(object):
 			'map': self.map,
 			'buildlevel': self.buildlevel,
 			'updatetime': self.updatetime,
+			'buildstate': self.buildstate,
 			'attacks': atmp,
 			'doubleinfo': [p.todict() for p in self.doubleinfo]
 		}
@@ -261,6 +263,7 @@ class MapInfo(object):
 			if d.get('map'): self.map = d.get('map')
 			if d.get('buildlevel'): self.buildlevel = d.get('buildlevel')
 			if d.get('updatetime'): self.updatetime = d.get('updatetime')
+			if d.get('buildstate'): self.buildstate = d.get('buildstate')
 			if d.get('attacks'):
 				self.attacks = []
 				for p in d.get('attacks'):
@@ -333,7 +336,6 @@ class MapInfo(object):
 		ret = [0 for _ in range(MapSize)]
 		retflag = [False for _ in range(MapSize)]
 		attackpoint = [0 for _ in range(MapSize)]
-		buildstate = [1 for _ in range(MapSize)]
 		for i in range(MapSize):
 			b = self.map[i]
 			l = self.buildlevel[i]
@@ -345,13 +347,15 @@ class MapInfo(object):
 				cfg = buildinglevelcfg[b][l]
 				tmnow = time.time()
 				t = tmnow - u
+				if self.buildstate[i] == 0:
+					pass
 				if t > cfg['timeinterval'] + cfg['timedisabled']:
-					buildstate[i] = 0
-					attackpoint[i] = self.getAttackNum(i, u + cfg['timeinterval'])
-					ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i] + self.getDoubleNum(i, u + cfg['timeinterval'])
-					ret[i] = max(0, ret[i])
-					retflag[i] = True
-
+					if self.buildstate[i] != 0:
+						self.buildstate[i] = 2
+						attackpoint[i] = self.getAttackNum(i, u + cfg['timeinterval'])
+						ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i] + self.getDoubleNum(i, u + cfg['timeinterval'])
+						ret[i] = max(0, ret[i])
+						retflag[i] = True
 				elif t >= cfg['timeinterval']:
 					attackpoint[i] = self.getAttackNum(i, u + cfg['timeinterval'])  
 					ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i] + self.getDoubleNum(i, u + cfg['timeinterval'])
@@ -362,7 +366,7 @@ class MapInfo(object):
 					ret[i] = int(t) * cfg['generate'] - attackpoint[i]  + self.getDoubleNum(i, tmnow)
 					ret[i] = max(0, ret[i])
 
-		return {'gen':ret, 'genflag':retflag, 'attackpoint':attackpoint, 'buildstate': buildstate,
+		return {'gen':ret, 'genflag':retflag, 'attackpoint':attackpoint, 'buildstate': self.buildstate,
 			'attacks':self.getAttackDict(), 'doubleinfo': [p.todict() for p in self.doubleinfo]
 		}
 
@@ -388,9 +392,16 @@ class MapInfo(object):
 			l = self.buildlevel[i]
 			u = self.updatetime[i]
 			cfg = buildinglevelcfg[b][l]
-			if u + cfg['timeinterval'] + cfg['timedisabled'] < time.time():
+			#if u + cfg['timeinterval'] + cfg['timedisabled'] < time.time():
+			#	self.updatetime[i] = time.time()
+			if self.buildstate[i] == 0:
+				self.buildstate[i] = 1
 				self.updatetime[i] = time.time()
 				return True
+			elif self.buildstate[i] == 2:
+				self.buildstate[i] = 1
+				return True
+				
 		return False
 
 	def getDouble(self, i):
@@ -438,7 +449,6 @@ class MapInfo(object):
 		ret = 0
 		retflag = False
 		attackpoint  = 0
-		buildstate = 1
 		if 0 <= i < MapSize:
 			b = self.map[i]
 			l = self.buildlevel[i]
@@ -448,12 +458,16 @@ class MapInfo(object):
 				cfg = buildinglevelcfg[b][l]
 				tmnow = time.time()
 				t = tmnow - u
-				if t > cfg['timeinterval'] + cfg['timedisabled']:
-					attackpoint = self.getAttackNum(i, u + cfg['timeinterval'])
-					ret = cfg['generate'] * cfg['timeinterval'] - attackpoint + self.getDoubleNum(i, u + cfg['timeinterval'])
-					ret = max(0, ret)
-					retflag = True
-					buildstate = 0
+
+				if self.buildstate[i] == 0:
+					pass
+				elif t > cfg['timeinterval'] + cfg['timedisabled']:
+					if self.buildstate[i] != 0:
+						attackpoint = self.getAttackNum(i, u + cfg['timeinterval'])
+						ret = cfg['generate'] * cfg['timeinterval'] - attackpoint + self.getDoubleNum(i, u + cfg['timeinterval'])
+						ret = max(0, ret)
+						retflag = True
+						self.buildstate[i] = 2
 				elif t >= cfg['timeinterval']:
 					attackpoint = self.getAttackNum(i, u + cfg['timeinterval'])
 					ret = cfg['generate'] * cfg['timeinterval'] - attackpoint + self.getDoubleNum(i, u + cfg['timeinterval'])
@@ -464,7 +478,7 @@ class MapInfo(object):
 					ret = int(t) * cfg['generate'] - attackpoint + self.getDoubleNum(i, tmnow)
 					ret = max(0, ret)
 
-		return {'gen':ret, 'genflag':retflag, 'attackpoint': attackpoint, 'buildstate': buildstate,
+		return {'gen':ret, 'genflag':retflag, 'attackpoint': attackpoint, 'buildstate': self.buildstate[i],
 			'attacks':self.getAttackDict(i), 'doubleinfo': self.doubleinfo[i].todict(),
 		}
 

@@ -32,6 +32,13 @@ def handle(param):
 			logger.info('gentmp:%s', gentmp)
 			if gentmp['genflag']:
 				mapdata.updatetime[bid] = time.time()
+
+
+				if gentmp['buildstate'] == 2:
+					mapdata.buildstate[bid] = 0
+
+				logger.info('%s,%s', gentmp['buildstate'], mapdata.buildstate[bid])
+
 				mapdata.delAttack(bid)
 
 				logger.info('after:%s', mapdata)
