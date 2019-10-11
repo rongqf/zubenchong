@@ -78,13 +78,14 @@ def ontimeReadDb():
 	print(txt)
 	logger.info(txt)
 
-
 	tmp = sqlutil.ReadDataFromDB('buildinglevelconfig')
 	buildinglevelcfg = {}
 	for p in tmp:
 		buildinglevelcfg[p['buildid']] = {}
 	for p in tmp:
 		buildinglevelcfg[p['buildid']][p['level']] = p
+	for p in buildinglevelcfg:
+		buildinglevelcfg[p]['maxlevel'] = len(buildinglevelcfg[p]) - 1
 
 	txt = json.dumps(buildinglevelcfg, encoding='utf-8', ensure_ascii=False, indent=2)
 	print(txt)
