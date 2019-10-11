@@ -1,21 +1,43 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 127.0.0.1
  Source Server Type    : MySQL
- Source Server Version : 50644
+ Source Server Version : 50711
  Source Host           : localhost:3306
  Source Schema         : gamedb
 
  Target Server Type    : MySQL
- Target Server Version : 50644
+ Target Server Version : 50711
  File Encoding         : 65001
 
- Date: 09/10/2019 13:29:15
+ Date: 11/10/2019 08:31:17
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for attackconfig
+-- ----------------------------
+DROP TABLE IF EXISTS `attackconfig`;
+CREATE TABLE `attackconfig`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `attackid` int(11) NULL DEFAULT NULL,
+  `attackname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `cost` int(10) NULL DEFAULT NULL,
+  `attacktime` int(11) NULL DEFAULT NULL,
+  `attackpoint` int(10) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of attackconfig
+-- ----------------------------
+INSERT INTO `attackconfig` VALUES (1, 1, '断水', 100, 300, 2);
+INSERT INTO `attackconfig` VALUES (2, 2, '断网', 120, 300, 3);
+INSERT INTO `attackconfig` VALUES (3, 3, '断电', 200, 300, 4);
+INSERT INTO `attackconfig` VALUES (4, 4, '扔垃圾', 150, 300, 5);
 
 -- ----------------------------
 -- Table structure for buildingconfig
@@ -37,11 +59,50 @@ CREATE TABLE `buildingconfig`  (
 DROP TABLE IF EXISTS `buildinglevelconfig`;
 CREATE TABLE `buildinglevelconfig`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `cost` decimal(15, 2) NOT NULL,
-  `valid` tinyint(4) NULL DEFAULT NULL,
+  `buildid` int(11) NOT NULL,
+  `level` int(11) NOT NULL,
+  `timeinterval` int(11) NOT NULL,
+  `generate` int(11) NOT NULL,
+  `upgrade` int(11) NOT NULL,
+  `timedisabled` int(11) NOT NULL,
+  `doubletime` int(11) NOT NULL DEFAULT 0,
+  `doublecost` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 63 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of buildinglevelconfig
+-- ----------------------------
+INSERT INTO `buildinglevelconfig` VALUES (33, 1, 0, 0, 0, 100, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (34, 1, 1, 15, 10, 100, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (35, 1, 2, 15, 20, 200, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (36, 1, 3, 15, 30, 300, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (37, 1, 4, 15, 40, 400, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (38, 1, 5, 15, 50, 400, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (39, 2, 0, 0, 0, 100, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (40, 2, 1, 15, 10, 100, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (41, 2, 2, 15, 20, 200, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (42, 2, 3, 15, 30, 300, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (43, 2, 4, 15, 40, 400, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (44, 2, 5, 15, 50, 500, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (45, 3, 0, 0, 0, 100, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (46, 3, 1, 10, 11, 500, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (47, 3, 2, 10, 22, 600, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (48, 3, 3, 10, 33, 70, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (49, 3, 4, 10, 44, 800, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (50, 3, 5, 15, 50, 900, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (51, 4, 0, 0, 0, 100, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (52, 4, 1, 10, 11, 500, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (53, 4, 2, 10, 22, 600, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (54, 4, 3, 10, 33, 700, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (55, 4, 4, 10, 44, 800, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (56, 4, 5, 15, 50, 900, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (57, 5, 0, 0, 0, 100, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (58, 5, 1, 8, 13, 600, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (59, 5, 2, 8, 24, 700, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (60, 5, 3, 8, 35, 800, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (61, 5, 4, 8, 46, 900, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (62, 5, 5, 8, 50, 1000, 600, 300, 500);
 
 -- ----------------------------
 -- Table structure for friend
@@ -169,6 +230,30 @@ INSERT INTO `userinfo` VALUES (20, '112233', 'test18', 1, '12', 0, 1000000, 0);
 INSERT INTO `userinfo` VALUES (21, '112233', 'test19', 1, '12', 0, 1000000, 0);
 INSERT INTO `userinfo` VALUES (22, '112233', 'test20', 1, '12', 0, 1000000, 0);
 INSERT INTO `userinfo` VALUES (23, '112233', 'test21', 1, '12', 0, 1000000, 0);
+
+-- ----------------------------
+-- Table structure for usertitle
+-- ----------------------------
+DROP TABLE IF EXISTS `usertitle`;
+CREATE TABLE `usertitle`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `level` int(11) NOT NULL,
+  `exp` int(11) NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of usertitle
+-- ----------------------------
+INSERT INTO `usertitle` VALUES (1, 1, 1000, '称号1');
+INSERT INTO `usertitle` VALUES (2, 2, 4000, '称号2');
+INSERT INTO `usertitle` VALUES (3, 3, 10000, '称号3');
+INSERT INTO `usertitle` VALUES (4, 4, 20000, '称号4');
+INSERT INTO `usertitle` VALUES (5, 5, 50000, '称号5');
+INSERT INTO `usertitle` VALUES (6, 6, 80000, '称号6');
+INSERT INTO `usertitle` VALUES (7, 7, 100000, '称号7');
+INSERT INTO `usertitle` VALUES (8, 8, 500000, '称号8');
 
 -- ----------------------------
 -- Procedure structure for AccFriend
