@@ -15,8 +15,8 @@ sqlcfg = {'host':"127.0.0.1",
     'charset':'utf8'}
 dbpool.initPool(**sqlcfg)
 
-updatesql = 'UPDATE userinfo SET gamepoint = %s, exp = %s WHERE userid = %s'
-filds = ['gamepoint', 'exp', 'userid']
+updatesql = 'UPDATE userinfo SET gamepoint = %s, exp = %s, mapdata= %s WHERE userid = %s'
+filds = ['gamepoint', 'exp', 'mapdata', 'userid']
 
 def WriteChangeUserIDs():
 	try:
@@ -35,7 +35,7 @@ def WriteChangeUserIDs():
 					rkey = 'hashuser:%s' % p
 					pipe.hmget(rkey, filds)
 				userinfos = pipe.execute()
-				userinfos = [(int(p[0]), int(p[1]), int(p[2])) for p in userinfos]
+				userinfos = [(int(p[0]), int(p[1]), p[2], int(p[3])) for p in userinfos]
 				print(userinfos)
 				sqlutil.executemany(updatesql,  userinfos)
 				tmp = [int(p) for p in tmp]

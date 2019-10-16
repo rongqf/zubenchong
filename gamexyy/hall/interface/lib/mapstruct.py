@@ -8,7 +8,9 @@ import logging
 logger = logging.getLogger('hell')
 
 
-MapSize = 10
+MapSize = 20
+MaxBuild = 20
+
 buildinglevelcfg = {
 	1: {
 		0: {'timeinterval': 0, 'generate': 0, 'upgrade': 100, 'timedisabled': 600},
@@ -217,8 +219,8 @@ class MapInfo(object):
 		self.updatetime = [time.time() for _ in range(MapSize)]
 		self.buildstate = [1 for _ in range(MapSize)]
 
-		self.map = [1, 1, 2, 2, 3, 4, 5, 0, 0, 0]
-		self.buildlevel = [1, 1, 2, 2, 1, 1, 1, 0, 0, 0]
+		self.map = [0 for _ in range(MapSize)]
+		self.buildlevel = [0 for _ in range(MapSize)]
 		self.attacks = [[] for _ in range(MapSize)]
 		self.doubleinfo = [DoubleItem() for _ in range(MapSize)]
 
@@ -302,7 +304,7 @@ class MapInfo(object):
 
 
 	def addAttack(self, i, aid):
-		if 0 <= i < MapSize:
+		if 0 <= i < MapSize and aid in attackcfg:
 			ishas = False
 			for j in range(len(self.attacks[i])):
 				if self.attacks[i][j].attackid == aid:
@@ -330,6 +332,13 @@ class MapInfo(object):
 			ret = len(arr) == len(self.attacks[i])
 			self.attacks[i] = arr
 		return ret
+
+	def createBuild(self, i, bid):
+		if self.map[i] == 0 and bid in buildinglevelcfg:
+			self.map[i] = bid
+			self.buildlevel[i] = 1
+			return True
+		return False
 
 		
 	def getGenAll(self):
@@ -376,6 +385,14 @@ class MapInfo(object):
 			l = self.buildlevel[i]
 			return buildinglevelcfg[b][l]['upgrade']
 		return 0
+
+	def getCreateBuild(self, bid, level):
+		if bid in buildinglevelcfg:
+			item = buildinglevelcfg[bid].get(level)
+			if item:
+				return item['upgrade']
+		return 0
+
 
 	def upgrade(self, i):
 		if 0 <= i < MapSize:

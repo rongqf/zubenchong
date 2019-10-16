@@ -47,12 +47,14 @@ import interface.friend
 import interface.marquee
 import interface.changepwd
 import interface.double
+import interface.createBuild
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
 			'getmap': interface.getmap.handle,
 			'getmapgen':interface.getmapgen.handle,
 			'collect':interface.collect.handle,
+			'createBuild': interface.createBuild.handle,
 			'upgrade':interface.upgrade.handle,
 			'userinfo':interface.userinfo.handle,
 			'getconfig':interface.getcfg.handle,

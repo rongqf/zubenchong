@@ -118,6 +118,21 @@ function upgrade(bid)
     });
 }
 
+
+function createBuild(bid, btype)
+{
+  var url = '/api?action=createBuild&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + ',"btype":' + btype + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('createBuild').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
 function double(bid)
 {
   var url = '/api?action=double&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + '}';
@@ -329,6 +344,11 @@ function changepwd(newpwd)
       upgrade
     </button>
     <div id="upgrade"></div>
+
+    <button onclick="createBuild(3, 2)">
+      createBuild(3, 2)
+    </button>
+    <div id="createBuild"></div>
 
 
     <button onclick="double(3)">
