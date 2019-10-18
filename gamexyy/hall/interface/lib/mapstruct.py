@@ -309,7 +309,8 @@ class MapInfo(object):
 					if aendtm > self.updatetime[i]:
 						b = max(self.updatetime[i], p.begintime)
 						e = min(aendtm, tm)
-						ret += int(e - b) * attackcfg[p.attackid]['attackpoint']
+						if b < e:
+							ret += int(e - b) * attackcfg[p.attackid]['attackpoint']
 		return ret
 
 
