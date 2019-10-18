@@ -347,6 +347,8 @@ class MapInfo(object):
 		if self.map[i] == 0 and bid in buildinglevelcfg:
 			self.map[i] = bid
 			self.buildlevel[i] = 1
+			self.buildstate[i] = 1
+			self.updatetime[i] = time.time()
 			return True
 		return False
 
