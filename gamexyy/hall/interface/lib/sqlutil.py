@@ -141,6 +141,7 @@ def InsertIntoDB(tablename,data):
 	except Exception,e:
 		logger.error(e)
 		logger.error(sql)
+		print(e)
 	cursor.close()
 	conn.close()
 	return bool(count)
@@ -373,3 +374,6 @@ if __name__ == '__main__':
 
 	txt = json.dumps(rst, encoding='utf-8', ensure_ascii=False, indent=2)
 	print (txt)
+
+
+	InsertIntoDB('userinfo', {'username': 'rqf123456', 'password': '112233', 'salt':'11'})

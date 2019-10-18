@@ -48,6 +48,7 @@ import interface.marquee
 import interface.changepwd
 import interface.double
 import interface.createBuild
+import interface.register
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
@@ -74,6 +75,8 @@ handdict = {'login': interface.login.handle,
 			'changepwd': interface.changepwd.handle,
 
 			'double': interface.double.handle,
+
+			'register': interface.register.handle,
 			}
 
 

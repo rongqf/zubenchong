@@ -23,23 +23,17 @@ LOG_FILENAME = 'logs/{module_name}-{filename}.log'.format(module_name=MODULE_NAM
 FORMAT = '[%(asctime)s]-%(levelname)-8s<%(name)s>{%(filename)s:%(lineno)s} -> %(message)s'
 
 logger = getLogger('hell')
-
 handler = logging.handlers.RotatingFileHandler(LOG_FILENAME,
                                                 maxBytes = LOG_FILE_MAXBYTES,
                                                 backupCount = LOG_FILE_BACKUPCOUNT,
                                                 )
 formatter = logging.Formatter(FORMAT)
-
 handler.setFormatter(formatter)
 logger.setLevel(LOG_LEVEL)
 logger.addHandler(handler)
-
-
 #rf_handler = logging.StreamHandler(sys.stdout) 
 #rf_handler.setFormatter(logging.Formatter("%(asctime)s -%(levelname)s %(name)s:%(lineno)s -> %(message)s"))
 #logger.addHandler(rf_handler)
-
-
 handler_err = logging.handlers.RotatingFileHandler("logs/error.log",
                                                 maxBytes = LOG_FILE_MAXBYTES,
                                                 backupCount = LOG_FILE_BACKUPCOUNT,
