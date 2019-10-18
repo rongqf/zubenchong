@@ -386,6 +386,7 @@ class MapInfo(object):
 					ret[i] = max(0, ret[i])
 
 		return {'gen':ret, 'genflag':retflag, 'attackpoint':attackpoint, 'buildstate': self.buildstate,
+			'updatetime': self.updatetime,
 			'attacks':self.getAttackDict(), 'doubleinfo': [p.todict() for p in self.doubleinfo]
 		}
 
@@ -506,6 +507,7 @@ class MapInfo(object):
 					ret = max(0, ret)
 
 		return {'gen':ret, 'genflag':retflag, 'attackpoint': attackpoint, 'buildstate': self.buildstate[i],
+			'updatetime': self.updatetime[i],
 			'attacks':self.getAttackDict(i), 'doubleinfo': self.doubleinfo[i].todict(),
 		}
 
