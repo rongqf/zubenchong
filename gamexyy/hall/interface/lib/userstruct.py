@@ -129,7 +129,7 @@ def read_mysql(username):
 	return None
 
 def read_mysql_userid(uid):
-	tmp = sqlutil.GetOneRecordInfo('userinfo', {'id':uid})
+	tmp = sqlutil.GetOneRecordInfo('userinfo', {'userid':uid})
 	if tmp:
 		u = UserStruct()
 		u.update(tmp)
