@@ -306,11 +306,10 @@ class MapInfo(object):
 				cfg = buildinglevelcfg[b][l]
 				for p in self.attacks[i]:
 					aendtm = p.begintime + p.attacktime
-					if aendtm > self.updatetime[i]:
-						b = max(self.updatetime[i], p.begintime)
-						e = min(aendtm, tm)
-						if b < e:
-							ret += int(e - b) * attackcfg[p.attackid]['attackpoint']
+					b = max(self.updatetime[i], p.begintime)
+					e = min(aendtm, tm)
+					if b < e:
+						ret += int(e - b) * attackcfg[p.attackid]['attackpoint']
 		return ret
 
 
