@@ -370,13 +370,14 @@ class MapInfo(object):
 				t = tmnow - u
 				if self.buildstate[i] == 0:
 					pass
-				if t > cfg['timeinterval'] + cfg['timedisabled']:
+				elif t > cfg['timeinterval'] + cfg['timedisabled']:
 					if self.buildstate[i] != 0:
 						self.buildstate[i] = 2
 						attackpoint[i] = self.getAttackNum(i, u + cfg['timeinterval'])
 						ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i] + self.getDoubleNum(i, u + cfg['timeinterval'])
 						ret[i] = max(0, ret[i])
 						retflag[i] = True
+
 				elif t >= cfg['timeinterval']:
 					attackpoint[i] = self.getAttackNum(i, u + cfg['timeinterval'])  
 					ret[i] = cfg['generate'] * cfg['timeinterval'] - attackpoint[i] + self.getDoubleNum(i, u + cfg['timeinterval'])
