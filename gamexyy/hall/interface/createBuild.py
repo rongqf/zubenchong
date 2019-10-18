@@ -28,7 +28,7 @@ def handle(param):
 		logger.info(mapdata)
 
 		if mapdata:
-			upoint = mapdata.getCreateBuild(bid, 0)
+			upoint = mapdata.getCreateBuild(btype, 0)
 			if upoint > 0 and tmp.gamepoint > upoint and mapdata.createBuild(bid, btype):
 
 				logger.info('change point:%s,%s', tmp.gamepoint, tmp.gamepoint - upoint)
