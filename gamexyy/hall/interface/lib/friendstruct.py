@@ -9,7 +9,7 @@ logger = logging.getLogger('hell')
 
 def get_friend(userid):
 	#sql = "CALL GetFriend('%d');"
-	sql = r'SELECT f.friendid, u.username, u.exp FROM friend f JOIN userinfo u on f.friendid = u.userid where f.userid = %d;'
+	sql = r'SELECT f.friendid, u.username, u.exp, u.logo FROM friend f JOIN userinfo u on f.friendid = u.userid where f.userid = %d;'
 	sql = sql % userid
 	return sqlutil.execsql(sql)
 

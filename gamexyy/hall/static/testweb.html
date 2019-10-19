@@ -16,7 +16,8 @@ var userid = 0;
 
 
 $(document).ready(function(){
-    $.get('/api?action=login&param={"username":"test6","password":"112233"}',function(data,status){
+    var url = encodeURI('/api?action=login&param={"username":"test6","password":"112233"}')
+    $.get(url,function(data,status){
       tmp = JSON.parse(data);
       console.log(tmp)
       skey = tmp["data"]['skey'];
