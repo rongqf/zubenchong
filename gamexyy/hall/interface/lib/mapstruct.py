@@ -230,6 +230,9 @@ class MapInfo(object):
 		self.buildstate = [1 for _ in range(MapSize)]
 
 		self.map = [0 for _ in range(MapSize)]
+		for i in range(5):
+			self.map[i] = i + 1
+			
 		self.buildlevel = [0 for _ in range(MapSize)]
 		self.attacks = [[] for _ in range(MapSize)]
 		self.doubleinfo = [DoubleItem() for _ in range(MapSize)]
@@ -352,11 +355,48 @@ class MapInfo(object):
 			return True
 		return False
 
+
+	def getSecAttack(self, i, tmnow):
+		ret = 0
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			u = self.updatetime[i]
+
+			if b > 0 and l > 0:
+				cfg = buildinglevelcfg[b][l]
+				for p in self.attacks[i]:
+					aendtm = p.begintime + p.attacktime
+					b = max(u, p.begintime)
+					e = min(aendtm, tm)
+					if b <= tmnow <= e:
+						ret += attackcfg[p.attackid]['attackpoint']
+		return ret
+
+	def getSecDouble(self, i, tmnow):
+		ret = 0
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			u = self.updatetime[i]
+			if b > 0 and l > 0:
+				cfg = buildinglevelcfg[b][l]
+				p = self.doubleinfo[i]
+				if p.valid():
+					aendtm = p.begintime + p.validtime
+					if aendtm > self.updatetime[i]:
+						b = max(self.updatetime[i], p.begintime)
+						e = min(aendtm, tm)
+						ret = cfg['generate']
+		return ret
 		
 	def getGenAll(self):
 		ret = [0 for _ in range(MapSize)]
 		retflag = [False for _ in range(MapSize)]
 		attackpoint = [0 for _ in range(MapSize)]
+
+		gensec = 0
+
 		for i in range(MapSize):
 			b = self.map[i]
 			l = self.buildlevel[i]
@@ -388,10 +428,14 @@ class MapInfo(object):
 					ret[i] = int(t) * cfg['generate'] - attackpoint[i]  + self.getDoubleNum(i, tmnow)
 					ret[i] = max(0, ret[i])
 
+					tmpsec = cfg['generate'] - self.getSecDouble(i, tmnow) + self.getAttackNum(i, tmnow)
+					tmpsec = max(0, tmpsec)
+					gensec += tmpsec
+
 		return {'gen':ret, 'genflag':retflag, 'attackpoint':attackpoint, 'buildstate': self.buildstate,
 			'updatetime': self.updatetime,
 			'attacks':self.getAttackDict(), 'doubleinfo': [p.todict() for p in self.doubleinfo],
-			'servertime': time.time(),
+			'servertime': time.time(), 'gensec':gensec,
 		}
 
 	def getUpgrade(self, i):
@@ -481,6 +525,8 @@ class MapInfo(object):
 		ret = 0
 		retflag = False
 		attackpoint  = 0
+
+
 		if 0 <= i < MapSize:
 			b = self.map[i]
 			l = self.buildlevel[i]
