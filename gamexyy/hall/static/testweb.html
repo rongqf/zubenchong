@@ -308,7 +308,7 @@ function changepwd(newpwd)
 
 function register(username,password)
 {
-  var param = {"password":username, "password":password};
+  var param = {"username":username, "password":password};
   var url = '/api?action=register&param=' + JSON.stringify(param);
   console.log(url);
   $.get(url, function(data,status)
@@ -479,7 +479,7 @@ function guard(bid, gid)
     <div id="changepwd"></div>
 
     <button onclick="register('ttttt', '123456')">
-      register
+      register('ttttt', '123456')
     </button>
     <div id="register"></div>
 
