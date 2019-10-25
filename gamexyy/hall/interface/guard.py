@@ -39,11 +39,15 @@ def handle(param):
 
         logger.info('mapdata:%s, apoint:%s', mapdata, apoint)
 
-        userstruct.write_redis_dict(attackuserid, {'mapdata': mapdata.tojson()})
-
         rds = rdsmanager.get_client(userid)
         rkey = 'hashuser:%s' % userid
-        rds.hincrby(rkey, 'gamepoint', -apoint)
+        pipe = rds.pipeline()
+        pipe.hset(rkey, 'mapdata', mapdata.tojson())
+        pipe.hincrby(rkey, 'gamepoint', -apoint)
+        pipe.execute()
+
+        userstruct.write_redis_updateuser(userid)
+
 
         return {'ret':1, 'data': {'des': 'attac ok'}}
 
