@@ -103,7 +103,7 @@ class UserStruct(object):
 			if d.get('skey'): self.skey = d.get('skey')
 			if d.get('update_time'): self.update_time = float(d.get('update_time'))
 			if d.get('mapdata'): self.mapstr = d.get('mapdata')
-			if d.get('zbc'): self.mapstr = d.get('zbc')
+			if d.get('zbc'): self.zbc = d.get('zbc')
 
 			#logger.debug(self)
 
