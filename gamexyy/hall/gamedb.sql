@@ -11,7 +11,7 @@
  Target Server Version : 50711
  File Encoding         : 65001
 
- Date: 16/10/2019 21:01:15
+ Date: 25/10/2019 09:58:42
 */
 
 SET NAMES utf8mb4;
@@ -47,11 +47,18 @@ CREATE TABLE `buildingconfig`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `buildid` int(11) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `cost` decimal(15, 2) NOT NULL,
-  `valid` tinyint(4) NOT NULL DEFAULT 1,
-  `level` int(11) NOT NULL,
+  `level` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of buildingconfig
+-- ----------------------------
+INSERT INTO `buildingconfig` VALUES (1, 1, '学校', NULL);
+INSERT INTO `buildingconfig` VALUES (2, 2, '医院', NULL);
+INSERT INTO `buildingconfig` VALUES (3, 3, '商店', NULL);
+INSERT INTO `buildingconfig` VALUES (4, 4, '游乐场', NULL);
+INSERT INTO `buildingconfig` VALUES (5, 5, '酒吧', NULL);
 
 -- ----------------------------
 -- Table structure for buildinglevelconfig
@@ -67,42 +74,43 @@ CREATE TABLE `buildinglevelconfig`  (
   `timedisabled` int(11) NOT NULL,
   `doubletime` int(11) NOT NULL DEFAULT 0,
   `doublecost` int(11) NOT NULL DEFAULT 0,
+  `recycle` decimal(11, 4) NOT NULL DEFAULT 0.0000,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 63 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of buildinglevelconfig
 -- ----------------------------
-INSERT INTO `buildinglevelconfig` VALUES (33, 1, 0, 0, 0, 100, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (34, 1, 1, 15, 10, 100, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (35, 1, 2, 15, 20, 200, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (36, 1, 3, 15, 30, 300, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (37, 1, 4, 15, 40, 400, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (38, 1, 5, 15, 50, 400, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (39, 2, 0, 0, 0, 100, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (40, 2, 1, 15, 10, 100, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (41, 2, 2, 15, 20, 200, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (42, 2, 3, 15, 30, 300, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (43, 2, 4, 15, 40, 400, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (44, 2, 5, 15, 50, 500, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (45, 3, 0, 0, 0, 100, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (46, 3, 1, 10, 11, 500, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (47, 3, 2, 10, 22, 600, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (48, 3, 3, 10, 33, 70, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (49, 3, 4, 10, 44, 800, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (50, 3, 5, 15, 50, 900, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (51, 4, 0, 0, 0, 100, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (52, 4, 1, 10, 11, 500, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (53, 4, 2, 10, 22, 600, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (54, 4, 3, 10, 33, 700, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (55, 4, 4, 10, 44, 800, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (56, 4, 5, 15, 50, 900, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (57, 5, 0, 0, 0, 100, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (58, 5, 1, 8, 13, 600, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (59, 5, 2, 8, 24, 700, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (60, 5, 3, 8, 35, 800, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (61, 5, 4, 8, 46, 900, 600, 300, 500);
-INSERT INTO `buildinglevelconfig` VALUES (62, 5, 5, 8, 50, 1000, 600, 300, 500);
+INSERT INTO `buildinglevelconfig` VALUES (33, 1, 0, 0, 0, 100, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (34, 1, 1, 15, 10, 100, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (35, 1, 2, 15, 20, 200, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (36, 1, 3, 15, 30, 300, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (37, 1, 4, 15, 40, 400, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (38, 1, 5, 15, 50, 400, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (39, 2, 0, 0, 0, 100, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (40, 2, 1, 15, 10, 100, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (41, 2, 2, 15, 20, 200, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (42, 2, 3, 15, 30, 300, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (43, 2, 4, 15, 40, 400, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (44, 2, 5, 15, 50, 500, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (45, 3, 0, 0, 0, 100, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (46, 3, 1, 10, 11, 500, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (47, 3, 2, 10, 22, 600, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (48, 3, 3, 10, 33, 70, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (49, 3, 4, 10, 44, 800, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (50, 3, 5, 15, 50, 900, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (51, 4, 0, 0, 0, 100, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (52, 4, 1, 10, 11, 500, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (53, 4, 2, 10, 22, 600, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (54, 4, 3, 10, 33, 700, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (55, 4, 4, 10, 44, 800, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (56, 4, 5, 15, 50, 900, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (57, 5, 0, 0, 0, 100, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (58, 5, 1, 8, 13, 600, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (59, 5, 2, 8, 24, 700, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (60, 5, 3, 8, 35, 800, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (61, 5, 4, 8, 46, 900, 600, 300, 500, 1000.0000);
+INSERT INTO `buildinglevelconfig` VALUES (62, 5, 5, 8, 50, 1000, 600, 300, 500, 1000.0000);
 
 -- ----------------------------
 -- Table structure for friend
@@ -200,37 +208,39 @@ CREATE TABLE `userinfo`  (
   `gamepoint` int(15) NOT NULL DEFAULT 0,
   `exp` int(15) NOT NULL DEFAULT 0,
   `mapdata` varchar(16384) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `zbc` decimal(15, 4) NOT NULL DEFAULT 0.0000,
   PRIMARY KEY (`userid`) USING BTREE,
-  INDEX `index_username`(`username`) USING BTREE,
+  UNIQUE INDEX `index_username`(`username`) USING BTREE,
   INDEX `index_gamepoint`(`gamepoint`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of userinfo
 -- ----------------------------
-INSERT INTO `userinfo` VALUES (1, '112233', 'rongqf', 1, '12', 0, 88888, 88888, NULL);
-INSERT INTO `userinfo` VALUES (2, '112233', 'huanghui', 1, '12', 100000000, 100000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (3, '112233', 'test1', 1, '12', 88888, 1000050, 150, NULL);
-INSERT INTO `userinfo` VALUES (4, '123456', 'test2', 1, '12', 88888, 997130, 0, NULL);
-INSERT INTO `userinfo` VALUES (5, '112233', 'test3', 1, '12', 88888, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (6, '112233', 'test4', 1, '12', 88888, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (7, '112233', 'test5', 1, '12', 88888, 1011728, 13628, NULL);
-INSERT INTO `userinfo` VALUES (8, '112233', 'test6', 1, '12', 88888, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (9, '112233', 'test7', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (10, '112233', 'test8', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (11, '112233', 'test9', 1, '12', 0, 999900, 300, '{\"map\": [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], \"updatetime\": [1571190465.887, 1571190465.887, 1571190465.887, 1571230711.663, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887, 1571190465.887], \"doubleinfo\": [{\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}, {\"validtime\": 0, \"valid\": false, \"begintime\": 0}], \"attacks\": [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []], \"buildstate\": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], \"buildlevel\": [0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}');
-INSERT INTO `userinfo` VALUES (12, '112233', 'test10', 1, '12', 0, 999600, 600, NULL);
-INSERT INTO `userinfo` VALUES (13, '112233', 'test11', 1, '12', 0, 999550, 150, NULL);
-INSERT INTO `userinfo` VALUES (14, '112233', 'test12', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (15, '112233', 'test13', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (16, '112233', 'test14', 1, '12', 0, 1001200, 1200, NULL);
-INSERT INTO `userinfo` VALUES (17, '112233', 'test15', 1, '12', 0, 1011150, 11250, NULL);
-INSERT INTO `userinfo` VALUES (18, '112233', 'test16', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (19, '112233', 'test17', 1, '12', 0, 1000460, 1160, NULL);
-INSERT INTO `userinfo` VALUES (20, '112233', 'test18', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (21, '112233', 'test19', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (22, '112233', 'test20', 1, '12', 0, 1000000, 0, NULL);
-INSERT INTO `userinfo` VALUES (23, '112233', 'test21', 1, '12', 0, 1000000, 0, NULL);
+INSERT INTO `userinfo` VALUES (1, '112233', 'rongqf', 1, '12', 0, 88888, 88888, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (2, '112233', 'huanghui', 1, '12', 100000000, 100000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (3, '112233', 'test1', 1, '12', 88888, 1000050, 150, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (4, '123456', 'test2', 1, '12', 88888, 997130, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (5, '112233', 'test3', 1, '12', 88888, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (6, '112233', 'test4', 1, '12', 88888, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (7, '112233', 'test5', 1, '12', 88888, 1011728, 13628, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (8, '112233', 'test6', 1, '12', 88888, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (9, '112233', 'test7', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (10, '112233', 'test8', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (11, '112233', 'test9', 1, '12', 0, 999900, 300, '', 0.0000);
+INSERT INTO `userinfo` VALUES (12, '112233', 'test10', 1, '12', 0, 999600, 600, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (13, '112233', 'test11', 1, '12', 0, 999550, 150, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (14, '112233', 'test12', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (15, '112233', 'test13', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (16, '112233', 'test14', 1, '12', 0, 1001200, 1200, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (17, '112233', 'test15', 1, '12', 0, 1011150, 11250, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (18, '112233', 'test16', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (19, '112233', 'test17', 1, '12', 0, 1000460, 1160, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (20, '112233', 'test18', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (21, '112233', 'test19', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (22, '112233', 'test20', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (23, '112233', 'test21', 1, '12', 0, 1000000, 0, NULL, 0.0000);
+INSERT INTO `userinfo` VALUES (24, '112233', 'rqf123456', 1, '11', 0, 0, 0, NULL, 0.0000);
 
 -- ----------------------------
 -- Table structure for usertitle

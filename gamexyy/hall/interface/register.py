@@ -35,7 +35,7 @@ def handle(param):
     if len(passwd) < 6:
         return {'ret':0, 'data': {'desc':'passwd less 6'}}
     
-    ret = sqlutil.InsertIntoDB('userinfo', {'username': 'rqf123456', 'password': '112233', 'salt':'11'})
+    ret = sqlutil.InsertIntoDB('userinfo', {'username': username, 'password': passwd, 'salt':'11'})
     if not ret:
         return {'ret':0, 'data': {'desc':'InsertIntoDB error'}}
 
