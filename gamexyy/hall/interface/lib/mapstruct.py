@@ -67,14 +67,21 @@ attackcfg = {
 	3:{'attackid': 3, 'attackname': u'断电', 'cost': 200,  'attacktime': 60 * 5, 'attackpoint': 4,},
 	4:{'attackid': 4, 'attackname': u'扔垃圾', 'cost': 150,  'attacktime': 60 * 5, 'attackpoint': 5,},
 }
+guardcfg = {}
 
 def ontimeReadDb():
-	global attackcfg, buildinglevelcfg
+	global attackcfg, buildinglevelcfg, guardcfg
 
 	tmp = sqlutil.ReadDataFromDB('attackconfig')
 	attackcfg = {}
 	for p in tmp:
 		attackcfg[p['attackid']] = p
+
+
+	tmp = sqlutil.ReadDataFromDB('guardconfig')
+	guardcfg = {}
+	for p in tmp:
+		guardcfg[p['guardid']] = p
 
 	txt = json.dumps(attackcfg, encoding='utf-8', ensure_ascii=False, indent=2)
 	print(txt)
@@ -112,6 +119,10 @@ def getAttacPoint(aid):
 		return attackcfg[aid]['cost']
 	return 0
 
+def getGuardPoint(gid):
+	if gid in guardcfg:
+		return guardcfg[gid]['cost']
+	return 0
 
 class AttackItem:
 	def __init__(self):
@@ -127,10 +138,17 @@ class AttackItem:
 		}
 		return d
 
+	def isValid(self):
+		return time.time() <= self.begintime + self.attacktime
+
 	def updatedict(self, d):
 		if d.get('attackid'): self.attackid = d.get('attackid')
 		if d.get('attacktime'): self.attacktime = d.get('attacktime')
 		if d.get('begintime'): self.begintime = d.get('begintime')
+
+	def guard(self, num):
+		self.attacktime -= num
+		self.attacktime = max(0, self.attacktime)
 
 	def __repr__(self):
 		return str([self.attackid, self.begintime, self.attacktime])
@@ -319,6 +337,7 @@ class MapInfo(object):
 	def addAttack(self, i, aid):
 		if 0 <= i < MapSize and aid in attackcfg:
 			ishas = False
+			self.delAttack(i)
 			for j in range(len(self.attacks[i])):
 				if self.attacks[i][j].attackid == aid:
 					self.attacks[i][j].attacktime += attackcfg[aid]['attacktime']
@@ -333,6 +352,17 @@ class MapInfo(object):
 			return True
 		return False
 
+	def guard(self, i, gid):
+		if 0 <= i < MapSize and gid in guardcfg:
+			self.delAttack(i)
+			gcfg = guardcfg[gid]
+			for j, p in enumerate(self.attacks[i])
+				if p.attackid == gcfg['attackid']:
+					self.attacks[i][j].guard(gcfg['guardtime'])
+					return True
+		return False
+
+
 
 	def delAttack(self, i):
 		ret = False
@@ -340,7 +370,7 @@ class MapInfo(object):
 			arr = []
 			for p in self.attacks[i]:
 				aid = p.attackid
-				if p.begintime + p.attacktime > time.time():
+				if p.isValid():
 					arr.append(p)
 			ret = len(arr) == len(self.attacks[i])
 			self.attacks[i] = arr
@@ -462,6 +492,9 @@ class MapInfo(object):
 				return True
 		return False
 
+
+
+
 	def getRecycle(self, i):
 		if 0 <= i < MapSize:
 			b = self.map[i]
@@ -511,7 +544,7 @@ class MapInfo(object):
 			l = self.buildlevel[i]
 			if b > 0 and l > 0:
 				cfg = buildinglevelcfg[b][l]
-				logger.info("aaaaaaaaaaaaaa:%s", self.doubleinfo[i].valid())
+				#logger.info("aaaaaaaaaaaaaa:%s", self.doubleinfo[i].valid())
 				if self.doubleinfo[i].valid():
 					self.doubleinfo[i].validtime += cfg['doubletime']
 				else:

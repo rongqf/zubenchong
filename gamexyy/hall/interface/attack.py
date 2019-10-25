@@ -51,7 +51,7 @@ def handle(param):
 
 		rds = rdsmanager.get_client(userid)
 		rkey = 'hashuser:%s' % userid
-		rds.hincrby(rkey, 'gamepoint', apoint)
+		rds.hincrby(rkey, 'gamepoint', -apoint)
 
 		return {'ret':1, 'data': {'des': 'attac ok'}}
 
