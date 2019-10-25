@@ -67,7 +67,6 @@ def acc_friend(userid, friendid, code):
 		sqlutil.InsertIntoDB('friend', {'userid':friendid, 'friendid':userid})
 		#sqlutil.execsqlcommit('INSERT ignore INTO friend(userid, friendid) VALUES(%d, %d)' % (userid, friendid))
 		#sqlutil.execsqlcommit('INSERT ignore INTO friend(userid, friendid) VALUES(%d, %d)' % (friendid, userid))
-		IGNORE
 
 	return {'des': 'ok'}
 
