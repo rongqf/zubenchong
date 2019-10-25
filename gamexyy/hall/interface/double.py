@@ -29,7 +29,7 @@ def handle(param):
 		if mapdata:
 			upoint = mapdata.getDouble(bid)
 
-			logger.info('%s,%s, %s', upoint, tmp.gamepoint, mapdata.double(bid))
+			logger.info('%s,%s', upoint, tmp.gamepoint)
 
 			if upoint > 0 and tmp.gamepoint > upoint and mapdata.double(bid):
 

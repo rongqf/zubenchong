@@ -308,7 +308,7 @@ function changepwd(newpwd)
 
 function register(username,password)
 {
-  var param = {"username":username, "password":password};
+  var param = {"password":username, "password":password};
   var url = '/api?action=register&param=' + JSON.stringify(param);
   console.log(url);
   $.get(url, function(data,status)
@@ -320,6 +320,24 @@ function register(username,password)
       //alert("数据：" + data + "\n状态：" + status);
     });
 }
+
+
+function recycle(bid)
+{
+  var param = {"skey":skey, "userid":userid, "bid":bid};
+  var url = '/api?action=recycle&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('recycle').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
 
 
 </script>
@@ -449,6 +467,11 @@ function register(username,password)
       register
     </button>
     <div id="register"></div>
+
+    <button onclick="recycle(3)">
+      recycle
+    </button>
+    <div id="recycle"></div>
 
   </div>
 

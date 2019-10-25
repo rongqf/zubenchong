@@ -232,7 +232,7 @@ class MapInfo(object):
 		self.map = [0 for _ in range(MapSize)]
 		for i in range(5):
 			self.map[i] = i + 1
-			
+
 		self.buildlevel = [0 for _ in range(MapSize)]
 		self.attacks = [[] for _ in range(MapSize)]
 		self.doubleinfo = [DoubleItem() for _ in range(MapSize)]
@@ -460,6 +460,23 @@ class MapInfo(object):
 			if l < buildinglevelcfg[b]['maxlevel']:
 				self.buildlevel[i] += 1
 				return True
+		return False
+
+	def getRecycle(self, i):
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			return buildinglevelcfg[b][l]['recycle']
+		return 0
+
+	def recycle(self, i):
+		if 0 <= i < MapSize:
+			self.buildlevel[i] = 0
+			self.updatetime[i] = 0
+			self.buildstate[i] = 1
+			self.attacks[i] = []
+			self.doubleinfo[i] = DoubleItem()
+			return True
 		return False
 
 	def activate(self, i):
