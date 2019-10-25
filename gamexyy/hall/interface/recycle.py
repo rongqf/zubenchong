@@ -42,7 +42,7 @@ def handle(param):
                 rkey = 'hashuser:%s' % userid
                 pipe = rds.pipeline()
                 pipe.hset(rkey, 'mapdata', mapdata.tojson())
-                pipe.hincrby(rkey, 'zbc', upoint)
+                pipe.hincrbyfloat(rkey, 'zbc', upoint)
                 pipe.execute() 
 
                 userstruct.write_redis_updateuser(userid)
