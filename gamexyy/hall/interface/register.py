@@ -39,4 +39,4 @@ def handle(param):
     if not ret:
         return {'ret':0, 'data': {'desc':'InsertIntoDB error'}}
 
-    return {'ret':1, 'data': {'desc':'username or password error'}}
+    return {'ret':1, 'data': {'desc':'ok'}}
