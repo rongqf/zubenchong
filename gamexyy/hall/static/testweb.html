@@ -338,6 +338,21 @@ function recycle(bid)
 }
 
 
+function guard(bid, gid)
+{
+  var param = {"skey":skey, "userid":userid, "guardid":gid, "guardbid":bid};
+  var url = '/api?action=guard&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('guard').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
 
 
 </script>
@@ -472,6 +487,12 @@ function recycle(bid)
       recycle
     </button>
     <div id="recycle"></div>
+
+
+    <button onclick="guard(3, 1)">
+      guard
+    </button>
+    <div id="guard"></div>
 
   </div>
 

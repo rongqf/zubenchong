@@ -50,6 +50,7 @@ import interface.double
 import interface.createBuild
 import interface.register
 import interface.recycle
+import interface.guard
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
@@ -79,6 +80,7 @@ handdict = {'login': interface.login.handle,
 
 			'register': interface.register.handle,
 			'recycle': interface.recycle.handle,
+			'guard': interface.guard.handle,
 			}
 
 
