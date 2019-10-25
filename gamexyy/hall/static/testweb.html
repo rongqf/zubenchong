@@ -304,9 +304,11 @@ function changepwd(newpwd)
     });
 }
 
-function register(username, password)
+
+
+function register(username,password)
 {
-  var param = {"skey":skey, "username":username, "pwd":password};
+  var param = {"username":username, "password":password};
   var url = '/api?action=register&param=' + JSON.stringify(param);
   console.log(url);
   $.get(url, function(data,status)
@@ -320,7 +322,7 @@ function register(username, password)
 }
 
 
- 
+</script>
 
 
 </head>
