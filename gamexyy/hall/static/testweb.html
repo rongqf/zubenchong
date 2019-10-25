@@ -304,9 +304,23 @@ function changepwd(newpwd)
     });
 }
 
+function register(username, password)
+{
+  var param = {"skey":skey, "username":username, "pwd":password};
+  var url = '/api?action=register&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('register').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
 
 
-</script>
+ 
 
 
 </head>
@@ -428,6 +442,11 @@ function changepwd(newpwd)
       changepwd
     </button>
     <div id="changepwd"></div>
+
+    <button onclick="register('ttttt', '123456')">
+      register
+    </button>
+    <div id="register"></div>
 
   </div>
 
