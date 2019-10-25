@@ -24,8 +24,11 @@ def handle(param):
         return {'ret':0, 'date': {'desc':'input error'}}
 
 
-    if not re.search(u'^[_a-zA-Z0-9\u4e00-\u9fa5]+$', username):
-        return {'ret':0, 'data': {'desc':'username is has (!,@,#,$,%...)'}}
+    #if not re.search(u'^[_a-zA-Z0-9\u4e00-\u9fa5]+$', username):
+    #    return {'ret':0, 'data': {'desc':'username is has (!,@,#,$,%...)'}}
+
+    if not re.match(r"^1[35678]\d{9}$", username):
+        return {'ret':0, 'data': {'desc':'username is not phonenum'}}
 
     tmp = userstruct.read_mysql(username)
     logger.debug(tmp)

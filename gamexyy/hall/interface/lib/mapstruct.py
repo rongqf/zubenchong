@@ -336,6 +336,11 @@ class MapInfo(object):
 
 	def addAttack(self, i, aid):
 		if 0 <= i < MapSize and aid in attackcfg:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			if b <= 0 and l <= 0:
+				return False
+
 			ishas = False
 			self.delAttack(i)
 			for j in range(len(self.attacks[i])):
@@ -492,6 +497,8 @@ class MapInfo(object):
 			l = self.buildlevel[i]
 			if l < buildinglevelcfg[b]['maxlevel']:
 				self.buildlevel[i] += 1
+				if self.buildstate[i] == 1:
+					self.updatetime[i] = time.time()
 				return True
 		return False
 
