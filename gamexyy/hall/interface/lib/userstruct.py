@@ -53,6 +53,7 @@ class UserStruct(object):
 		self.update_time = 0
 		self.mapstr = ''
 		self.mapdata = None
+		self.zbc = 0.0
 
 	def __repr__(self):
 		return str(self.__dict__)
@@ -81,6 +82,7 @@ class UserStruct(object):
 			'skey': self.skey,
 			'exp': self.exp,
 			'title': getusertitle(self.exp),
+			'zbc': self.zbc,
 		}
 		return d
 
@@ -101,6 +103,7 @@ class UserStruct(object):
 			if d.get('skey'): self.skey = d.get('skey')
 			if d.get('update_time'): self.update_time = float(d.get('update_time'))
 			if d.get('mapdata'): self.mapstr = d.get('mapdata')
+			if d.get('zbc'): self.mapstr = d.get('zbc')
 
 			#logger.debug(self)
 
