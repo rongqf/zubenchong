@@ -2,6 +2,8 @@
 
 import tornado.web
 
+from lib.RedisManager import rdsmanager
+
 from lib import userstruct
 from lib import sqlutil
 
@@ -10,10 +12,7 @@ import time, re
 import random
 from lib.log import logger
 
-def md5(txt):
-    m = hashlib.md5()   
-    m.update(txt)
-    return m.hexdigest()
+
     
 def handle(param):
 
@@ -44,7 +43,7 @@ def handle(param):
                 pipe = rds.pipeline()
                 pipe.hset(rkey, 'mapdata', mapdata.tojson())
                 pipe.hincrby(rkey, 'zbc', upoint)
-                pipe.execute()
+                pipe.execute() 
 
                 userstruct.write_redis_updateuser(userid)
 
