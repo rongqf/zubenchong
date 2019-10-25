@@ -357,7 +357,7 @@ class MapInfo(object):
 			self.delAttack(i)
 			gcfg = guardcfg[gid]
 
-			logger.debug("%s, %s", gcfg, self.attacks[i][0])
+			logger.debug("%s, %s", gcfg, self.attacks[i])
 
 			for j, p in enumerate(self.attacks[i]):
 				if p.attackid == gcfg['attackid']:
