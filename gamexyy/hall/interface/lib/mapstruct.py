@@ -356,6 +356,9 @@ class MapInfo(object):
 		if 0 <= i < MapSize and gid in guardcfg:
 			self.delAttack(i)
 			gcfg = guardcfg[gid]
+
+			logger.debug("%s, %s", gcfg, self.attacks[i][0])
+
 			for j, p in enumerate(self.attacks[i]):
 				if p.attackid == gcfg['attackid']:
 					self.attacks[i][j].guard(gcfg['guardtime'])
