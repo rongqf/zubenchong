@@ -8,7 +8,7 @@
 <title>Testing websockets</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
 <script>
 
 var skey = '';
@@ -16,14 +16,15 @@ var userid = 0;
 
 
 $(document).ready(function(){
-    $.get('/api?action=login&param={"username":"test8","password":"112233"}',function(data,status){
+    var url = encodeURI('/api?action=login&param={"username":"test10","password":"112233"}')
+    $.get(url,function(data,status){
       tmp = JSON.parse(data);
       console.log(tmp)
       skey = tmp["data"]['skey'];
       userid = tmp["data"]['userid']
-	  document.getElementById('messages').innerHTML += '<br />'  + data;
-	  
-	  
+    document.getElementById('messages').innerHTML += '<br />'  + data;
+    
+    
       //alert("数据：" + data + "\n状态：" + status);
     });
 });
@@ -31,7 +32,9 @@ $(document).ready(function(){
 
 function userinfo()
 {
-  var url = '/api?action=userinfo&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
+
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=userinfo&param=' + JSON.stringify(param);
   console.log(url);
   $.get(url, function(data,status)
   {
@@ -58,9 +61,10 @@ function getconfig()
 }
 
 
-function getmap()
+function getmap(otherid=0)
 {
-  var url = '/api?action=getmap&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
+  var param = {"skey":skey, "userid":userid, "otherid":otherid};
+  var url = '/api?action=getmap&param=' + JSON.stringify(param);
   console.log(url);
   $.get(url, function(data,status)
   {
@@ -72,9 +76,10 @@ function getmap()
     });
 }
 
-function getmapgen()
+function getmapgen(otherid=0)
 {
-  var url = '/api?action=getmapgen&param={"skey":"' + skey + '",' + '"userid":'+userid  + '}';
+  var param = {"skey":skey, "userid":userid, "otherid":otherid};
+  var url = '/api?action=getmapgen&param=' + JSON.stringify(param);
   console.log(url);
   $.get(url, function(data,status)
   {
@@ -114,6 +119,36 @@ function upgrade(bid)
     });
 }
 
+
+function createBuild(bid, btype)
+{
+  var url = '/api?action=createBuild&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + ',"btype":' + btype + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('createBuild').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function double(bid)
+{
+  var url = '/api?action=double&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + '}';
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('double').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
 function activate(bid)
 {
   var url = '/api?action=activate&param={"skey":"' + skey + '",' + '"userid":'+ userid  + ',"bid":' + bid + '}';
@@ -142,6 +177,71 @@ function attack(attackuserid, bid, attackid)
     });
 }
 
+
+
+
+function  getfriend()
+{
+
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getfriend&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getfriend').innerHTML =  data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function getfriendreq()
+{
+
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getfriendreq&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getfriendreq').innerHTML =  data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+function addfriend(name='test10')
+{
+  var param = {"skey":skey, "userid":userid, "otherusername":name};
+  var url = '/api?action=addfriend&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('addfriend').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function acceptfriend(otherid, acode = 1)
+{
+  var param = {"skey":skey, "userid":userid, "otherid":otherid, 'acode':acode};
+  var url = '/api?action=acceptfriend&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('acceptfriend').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
 function rank()
 {
   var param = {"skey":skey, "userid":userid};
@@ -151,7 +251,54 @@ function rank()
   {
       tmp = JSON.parse(data);
       
-      document.getElementById('attack').innerHTML += '<br />'  + data;
+      document.getElementById('rank').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
+function getmarqueeloop()
+{
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getmarqueeloop&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getmarqueeloop').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
+function getmarqueenormal()
+{
+  var param = {"skey":skey, "userid":userid};
+  var url = '/api?action=getmarqueenormal&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('getmarqueenormal').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+function changepwd(newpwd)
+{
+  var param = {"skey":skey, "userid":userid, "oldpwd":'112233', 'newpwd': newpwd};
+  var url = '/api?action=changepwd&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('changepwd').innerHTML += '<br />'  + data;
     
       //alert("数据：" + data + "\n状态：" + status);
     });
@@ -180,8 +327,15 @@ function rank()
     
 
     <button onclick="getmap()">
-      getmap
+      getmap(0)
     </button>
+      
+
+    <button onclick="getmap(2)">
+      getmap(2)
+    </button>
+
+
     <div id="map"></div>
 
     <button onclick="getmapgen()">
@@ -199,22 +353,81 @@ function rank()
     </button>
     <div id="upgrade"></div>
 
+    <button onclick="createBuild(3, 2)">
+      createBuild(3, 2)
+    </button>
+
+    <button onclick="createBuild(5, 3)">
+      createBuild(5, 3)
+    </button>
+
+    <button onclick="createBuild(10, 4)">
+      createBuild(10, 4)
+    </button>
+
+
+    <button onclick="createBuild(12, 5)">
+      createBuild(12, 5)
+    </button>
+
+    <div id="createBuild"></div>
+
+
+    <button onclick="double(3)">
+      double
+    </button>
+    <div id="double"></div>
+
     <button onclick="activate(3)">
       activate
     </button>
     <div id="activate"></div>
 
-    <button onclick="attack(9, 3, 2)">
+    <button onclick="attack(7, 3, 1)">
       attack
     </button>
     <div id="attack"></div>
 
+
+
+    <button onclick="getfriend()">
+      getfriend
+    </button>
+    <div id="getfriend"></div>
+    <button onclick="getfriendreq()">
+      getfriendreq
+    </button>
+    <div id="getfriendreq"></div>
+
+    <button onclick="addfriend('test6')">
+      addfriend
+    </button>
+    <div id="addfriend"></div>
+
+    <button onclick="acceptfriend(12, 1)">
+      acceptfriend
+    </button>
+    <div id="acceptfriend"></div>
 
     <button onclick="rank()">
       rank
     </button>
     <div id="rank"></div>
 
+    <button onclick="getmarqueeloop()">
+      getmarqueeloop
+    </button>
+    <div id="getmarqueeloop"></div>
+
+    <button onclick="getmarqueenormal()">
+      getmarqueenormal
+    </button>
+    <div id="getmarqueenormal"></div>
+
+    <button onclick="changepwd('123456')">
+      changepwd
+    </button>
+    <div id="changepwd"></div>
 
   </div>
 
