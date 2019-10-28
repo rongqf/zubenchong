@@ -523,8 +523,10 @@ class MapInfo(object):
 		return False
 
 	def activate(self, i):
-		logger.info("%s, %s", i, MapSize)
+		
 		if 0 <= i < MapSize:
+			self.getGen(i)
+			
 			b = self.map[i]
 			l = self.buildlevel[i]
 			u = self.updatetime[i]
