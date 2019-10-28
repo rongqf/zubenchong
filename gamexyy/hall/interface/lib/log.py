@@ -10,6 +10,7 @@ import logging.handlers
 from logging import getLogger, INFO, WARN, DEBUG, ERROR, FATAL
 
 
+FORMAT = '[%(asctime)s]-%(levelname)-8s<%(name)s>{%(filename)s:%(lineno)s} -> %(message)s'
 
 
 logger = getLogger('hell')
@@ -30,9 +31,8 @@ def initlog():
     MODULE_NAME = 'web'
     filename = time.strftime('%Y-%m-%d', time.localtime(time.time()))
     LOG_FILENAME = 'logs/{module_name}-{filename}.log'.format(module_name=MODULE_NAME, filename=filename)
-    FORMAT = '[%(asctime)s]-%(levelname)-8s<%(name)s>{%(filename)s:%(lineno)s} -> %(message)s'
-
     
+
     handler = logging.handlers.RotatingFileHandler(LOG_FILENAME,
                                                     maxBytes = LOG_FILE_MAXBYTES,
                                                     backupCount = LOG_FILE_BACKUPCOUNT,
@@ -87,6 +87,8 @@ class MyHandler(logging.Handler):
     def __init__(self, stream=None):
         logging.Handler.__init__(self)
         self.stream = stream
+
+        formatter = logging.Formatter(FORMAT)
         self.setFormatter(formatter)
         self.count = 0
 

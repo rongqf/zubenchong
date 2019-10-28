@@ -523,6 +523,7 @@ class MapInfo(object):
 		return False
 
 	def activate(self, i):
+		logger.info(i, MapSize)
 		if 0 <= i < MapSize:
 			b = self.map[i]
 			l = self.buildlevel[i]
