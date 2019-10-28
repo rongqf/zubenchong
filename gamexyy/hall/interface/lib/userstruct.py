@@ -115,10 +115,10 @@ class UserStruct(object):
 
 
 	def getmap(self):
+		mapdata = mapstruct.MapInfo()
 		if not self.mapdata and self.mapstr != '':
-			mapdata = mapstruct.MapInfo()
 			mapdata.updatejson(self.mapstr)
-			self.mapdata = mapdata
+		self.mapdata = mapdata
 		return self.mapdata
 
 
