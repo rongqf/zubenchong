@@ -36,7 +36,7 @@ def handle(param):
 
             if upoint > 0 and mapdata.recycle(bid):
 
-                logger.info('change point:%s,%s', tmp.zbc, tmp.zbc + upoint)
+                logger.info('change point:%s,%s', tmp.zbc, (tmp.zbc + upoint))
 
                 rds = rdsmanager.get_client(userid)
                 rkey = 'hashuser:%s' % userid
