@@ -100,7 +100,7 @@ class ApiHandler(tornado.web.RequestHandler):
 		logger.info("%s:%s", action, param)
 
 		if True:
-		#try:
+		try:
 			if param:
 				param = json.loads(param)
 			if not action in handdict:
@@ -119,8 +119,12 @@ class ApiHandler(tornado.web.RequestHandler):
 			
 			logger.info(ret)	
 			self.write(json.dumps(ret))
-		#except Exception as e:
-		#	logger.error(str(e))
+		except Exception as e:
+			print '########################################################'
+            errorstring += traceback.format_exc()
+            print 'traceback.format_exc():\n%s' % errorstring
+            print '########################################################'
+            logger.error('traceback.format_exc():\n%s' % errorstring)
 
 		logger.info('<-' + '-' * 40)
 
