@@ -581,7 +581,8 @@ class MapInfo(object):
 					if aendtm > self.updatetime[i]:
 						b = max(self.updatetime[i], p.begintime)
 						e = min(aendtm, tm)
-						ret = int(e - b) * cfg['generate']
+						if b < e:
+							ret = int(e - b) * cfg['generate']
 		return ret
 
 	def getGen(self, i):
