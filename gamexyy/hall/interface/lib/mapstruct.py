@@ -406,7 +406,7 @@ class MapInfo(object):
 				for p in self.attacks[i]:
 					aendtm = p.begintime + p.attacktime
 					b = max(u, p.begintime)
-					e = min(aendtm, tm)
+					e = min(aendtm, tmnow)
 					if b <= tmnow <= e:
 						ret += attackcfg[p.attackid]['attackpoint']
 		return ret
@@ -424,7 +424,7 @@ class MapInfo(object):
 					aendtm = p.begintime + p.validtime
 					if aendtm > self.updatetime[i]:
 						b = max(self.updatetime[i], p.begintime)
-						e = min(aendtm, tm)
+						e = min(aendtm, tmnow)
 						ret = cfg['generate']
 		return ret
 		
@@ -466,7 +466,7 @@ class MapInfo(object):
 					ret[i] = int(t) * cfg['generate'] - attackpoint[i]  + self.getDoubleNum(i, tmnow)
 					ret[i] = max(0, ret[i])
 
-					tmpsec = cfg['generate'] - self.getSecDouble(i, tmnow) + self.getAttackNum(i, tmnow)
+					tmpsec = cfg['generate'] + self.getSecDouble(i, tmnow) - self.getSecAttack(i, tmnow)
 					tmpsec = max(0, tmpsec)
 					gensec += tmpsec
 
