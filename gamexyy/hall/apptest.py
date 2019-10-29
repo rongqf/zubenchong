@@ -99,7 +99,7 @@ class ApiHandler(tornado.web.RequestHandler):
 		logger.info('-' * 40 + '->')
 		logger.info("%s:%s", action, param)
 
-		if True:
+	
 		try:
 			if param:
 				param = json.loads(param)
