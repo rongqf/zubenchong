@@ -22,11 +22,11 @@ from interface.lib.log import logger
 
 
 sqlcfg = {'host':"127.0.0.1",
-    'user':'root',
-    'passwd':'112233',
-    'db':'gamedb',
-    'port':3306,
-    'charset':'utf8'}
+	'user':'root',
+	'passwd':'112233',
+	'db':'gamedb',
+	'port':3306,
+	'charset':'utf8'}
 
 dbpool.initPool(**sqlcfg)
 
@@ -122,10 +122,10 @@ class ApiHandler(tornado.web.RequestHandler):
 			self.write(json.dumps(ret))
 		except Exception as e:
 			print '########################################################'
-            errorstring += traceback.format_exc()
-            print 'traceback.format_exc():\n%s' % errorstring
-            print '########################################################'
-            logger.error('traceback.format_exc():\n%s' % errorstring)
+			errorstring += traceback.format_exc()
+			print 'traceback.format_exc():\n%s' % errorstring
+			print '########################################################'
+			logger.error('traceback.format_exc():\n%s' % errorstring)
 
 		logger.info('<-' + '-' * 40)
 
@@ -171,8 +171,8 @@ def main():
 	tornado.options.parse_command_line()
 	application = tornado.web.Application(
 		urlcfg,
-        template_path = template_path,
-        static_path = static_path,
+		template_path = template_path,
+		static_path = static_path,
 		**settings
 		)
 	http_server = tornado.httpserver.HTTPServer(application)
