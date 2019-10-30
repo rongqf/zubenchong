@@ -84,7 +84,7 @@ def ontimeReadDb():
 		guardcfg[p['guardid']] = p
 
 	txt = json.dumps(attackcfg, encoding='utf-8', ensure_ascii=False, indent=2)
-	print(txt)
+	#print(txt)
 	logger.info(txt)
 
 	bname = sqlutil.ReadDataFromDB('buildingconfig')
@@ -107,7 +107,7 @@ def ontimeReadDb():
 		buildinglevelcfg[p]['name'] = name.get(p, '')
 
 	txt = json.dumps(buildinglevelcfg, encoding='utf-8', ensure_ascii=False, indent=2)
-	print(txt)
+	#print(txt)
 	logger.info(txt)
 	
 
