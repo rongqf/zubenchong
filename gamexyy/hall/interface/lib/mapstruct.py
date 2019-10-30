@@ -509,7 +509,8 @@ class MapInfo(object):
 		if 0 <= i < MapSize:
 			b = self.map[i]
 			l = self.buildlevel[i]
-			return buildinglevelcfg[b][l]['recycle']
+			if b > 0 and l > 0:
+				return buildinglevelcfg[b][l]['recycle']
 		return 0
 
 	def recycle(self, i):
