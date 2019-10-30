@@ -473,7 +473,7 @@ class MapInfo(object):
 		return {'gen':ret, 'genflag':retflag, 'attackpoint':attackpoint, 'buildstate': self.buildstate,
 			'updatetime': self.updatetime,
 			'attacks':self.getAttackDict(), 'doubleinfo': [p.todict() for p in self.doubleinfo],
-			'servertime': time.time(), 'gensec':gensec,
+			'servertime': time.time(), 'gensec':gensec, 
 		}
 
 	def getUpgrade(self, i):

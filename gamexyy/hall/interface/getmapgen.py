@@ -26,6 +26,7 @@ def handle(param):
 			logger.info("%s", tmp)
 			if mapdata:
 				tmpgen = mapdata.getGenAll()
+				tmpgen['exp'] = tmp.exp
 		else:
 			other = userstruct.read_user(otherid)
 			if not other: 
@@ -35,6 +36,7 @@ def handle(param):
 			logger.info("%s", tmp)
 			if mapdata:
 				tmpgen = mapdata.getGenAll()
+				tmpgen['exp'] = other.exp
 
 		
 	return {'ret':ret, 'data':tmpgen}
