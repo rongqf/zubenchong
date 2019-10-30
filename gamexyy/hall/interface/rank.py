@@ -15,7 +15,7 @@ def handle(param):
 	ranklistupdatetime, ranklist = rankinfo
 	if time.time() - ranklistupdatetime > 60 * 5:
 		rankinfo[0] = time.time()
-		rankinfo[1] = sqlutil.execsql('SELECT username, logo, exp FROM userinfo  ORDER BY exp DESC LIMIT 50')
+		rankinfo[1] = sqlutil.execsql('SELECT userid, username, logo, exp FROM userinfo  ORDER BY exp DESC LIMIT 50')
 		for r in rankinfo[1]:
 			r['title'] = userstruct.getusertitle(r['exp'])
 
