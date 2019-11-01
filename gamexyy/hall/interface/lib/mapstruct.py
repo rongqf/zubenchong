@@ -374,10 +374,21 @@ class MapInfo(object):
 
 			logger.debug("%s, %s", gcfg, self.attacks[i])
 
-			for j, p in enumerate(self.attacks[i]):
-				if p.attackid == gcfg['attackid']:
-					self.attacks[i][j].guard(gcfg['guardtime'])
+			if gcfg['guardtype'] == 1:
+				for j, p in enumerate(self.attacks[i]):
+					if p.attackid == gcfg['attackid']:
+						self.attacks[i][j].guard(gcfg['guardtime'])
+						return True
+
+			elif gcfg['guardtype'] == 2:
+				if len(self.attacks[i]) <= 0:
+					if self.protectinfo[i].valid():
+						self.protectinfo[i].validtime += gcfg['guardtime']
+					else:
+						self.protectinfo[i].begintime = time.time()
+						self.protectinfo[i].validtime = gcfg['guardtime']
 					return True
+
 		return False
 
 
