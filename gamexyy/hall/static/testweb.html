@@ -354,6 +354,22 @@ function guard(bid, gid)
 }
 
 
+function protect(bid)
+{
+  var param = {"skey":skey, "userid":userid, "bid":bid};
+  var url = '/api?action=protect&param=' + JSON.stringify(param);
+  console.log(url);
+  $.get(url, function(data,status)
+  {
+      tmp = JSON.parse(data);
+      
+      document.getElementById('protect').innerHTML += '<br />'  + data;
+    
+      //alert("数据：" + data + "\n状态：" + status);
+    });
+}
+
+
 
 </script>
 
@@ -493,6 +509,14 @@ function guard(bid, gid)
       guard
     </button>
     <div id="guard"></div>
+
+    <button onclick="protect(3)">
+      protect
+    </button>
+    <div id="protect"></div>
+
+
+    
 
   </div>
 

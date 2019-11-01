@@ -1,5 +1,24 @@
 
 # -*- coding: utf8 -*-
+
+import __builtin__
+import json
+import time
+import traceback
+
+'''
+print('1', open)
+
+oldopen = __builtin__.open 
+def test(f, m):
+	print(f, m)
+
+	return oldopen(f, m)
+	
+__builtin__.open = test
+print('2', oldopen, open)
+'''
+
 import os,sys
 import tornado.httpserver
 import tornado.ioloop
@@ -9,10 +28,8 @@ from tornado.options import define, options
 import tornado.log
 
 
-import json
-import time
-import traceback
 
+  
 
 from interface.lib.dbpool import dbpool
 from interface.lib.RedisManager import rdsmanager
@@ -22,11 +39,11 @@ from interface.lib.log import logger
 
 
 sqlcfg = {'host':"127.0.0.1",
-    'user':'root',
-    'passwd':'112233',
-    'db':'gamedb',
-    'port':3306,
-    'charset':'utf8'}
+	'user':'root',
+	'passwd':'112233',
+	'db':'gamedb',
+	'port':3306,
+	'charset':'utf8'}
 
 dbpool.initPool(**sqlcfg)
 
@@ -52,6 +69,7 @@ import interface.createBuild
 import interface.register
 import interface.recycle
 import interface.guard
+import interface.protect
 
 handdict = {'login': interface.login.handle,
 			'gamelist': interface.gamelist.handle,
@@ -78,6 +96,7 @@ handdict = {'login': interface.login.handle,
 			'changepwd': interface.changepwd.handle,
 
 			'double': interface.double.handle,
+			'protect': interface.protect.handle,
 
 			'register': interface.register.handle,
 			'recycle': interface.recycle.handle,
@@ -171,8 +190,8 @@ def main():
 	tornado.options.parse_command_line()
 	application = tornado.web.Application(
 		urlcfg,
-        template_path = template_path,
-        static_path = static_path,
+		template_path = template_path,
+		static_path = static_path,
 		**settings
 		)
 	http_server = tornado.httpserver.HTTPServer(application)

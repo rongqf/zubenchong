@@ -17,10 +17,12 @@ logger = getLogger('hell')
 
 initflag = False
 def initlog():
-    global initflag
+    global initflag, logger
     if initflag:
         return 
 
+
+    print('aaaaaa', initflag)
     initflag = True
 
     LOG_FILE_MAXBYTES = 1024 * 1024 * 30     # 3 Mb
@@ -31,11 +33,12 @@ def initlog():
     MODULE_NAME = 'web'
     filename = time.strftime('%Y-%m-%d', time.localtime(time.time()))
     LOG_FILENAME = 'logs/{module_name}-{filename}.log'.format(module_name=MODULE_NAME, filename=filename)
-    
+      
 
     handler = logging.handlers.RotatingFileHandler(LOG_FILENAME,
                                                     maxBytes = LOG_FILE_MAXBYTES,
                                                     backupCount = LOG_FILE_BACKUPCOUNT,
+                                                     delay=1
                                                     )
     formatter = logging.Formatter(FORMAT)
     handler.setFormatter(formatter)
@@ -47,7 +50,8 @@ def initlog():
     handler_err = logging.handlers.RotatingFileHandler("logs/error.log",
                                                     maxBytes = LOG_FILE_MAXBYTES,
                                                     backupCount = LOG_FILE_BACKUPCOUNT,
-                                                    )
+                                                    delay=1
+                                                   )
 
     handler_err.setFormatter(formatter)
     handler_err.setLevel(logging.ERROR)

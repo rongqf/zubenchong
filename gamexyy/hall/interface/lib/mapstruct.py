@@ -153,7 +153,7 @@ class AttackItem:
 	def __repr__(self):
 		return str([self.attackid, self.begintime, self.attacktime])
 
-class DoubleItem:
+class EffectItem:
 	def __init__(self):
 		self.begintime = 0
 		self.validtime = 0
@@ -253,7 +253,9 @@ class MapInfo(object):
 
 		self.buildlevel = [0 for _ in range(MapSize)]
 		self.attacks = [[] for _ in range(MapSize)]
-		self.doubleinfo = [DoubleItem() for _ in range(MapSize)]
+		self.doubleinfo = [EffectItem() for _ in range(MapSize)]
+
+		self.protectinfo = [EffectItem() for _ in range(MapSize)]
 
 	def __repr__(self):
 		return str(self.__dict__)
@@ -282,7 +284,8 @@ class MapInfo(object):
 			'updatetime': self.updatetime,
 			'buildstate': self.buildstate,
 			'attacks': atmp,
-			'doubleinfo': [p.todict() for p in self.doubleinfo]
+			'doubleinfo': [p.todict() for p in self.doubleinfo],
+			'protectinfo': [p.todict() for p in self.protectinfo],
 		}
 		return d
 
@@ -315,6 +318,10 @@ class MapInfo(object):
 				for i in range(len(dinfo)):
 					self.doubleinfo[i].updatedict(dinfo[i])
 
+			if d.get('protectinfo'):
+				dinfo = d.get('protectinfo')
+				for i in range(len(dinfo)):
+					self.protectinfo[i].updatedict(dinfo[i])
 
 	def getAttackNum(self, i, tm):
 		ret = 0
@@ -339,6 +346,9 @@ class MapInfo(object):
 			b = self.map[i]
 			l = self.buildlevel[i]
 			if b <= 0 and l <= 0:
+				return False
+
+			if self.protectinfo[i].valid():
 				return False
 
 			ishas = False
@@ -472,7 +482,9 @@ class MapInfo(object):
 
 		return {'gen':ret, 'genflag':retflag, 'attackpoint':attackpoint, 'buildstate': self.buildstate,
 			'updatetime': self.updatetime,
-			'attacks':self.getAttackDict(), 'doubleinfo': [p.todict() for p in self.doubleinfo],
+			'attacks':self.getAttackDict(), 
+			'doubleinfo': [p.todict() for p in self.doubleinfo], 
+			'protectinfo': [p.todict() for p in self.protectinfo], 
 			'servertime': time.time(), 'gensec':gensec, 
 		}
 
@@ -502,9 +514,6 @@ class MapInfo(object):
 				return True
 		return False
 
-
-
-
 	def getRecycle(self, i):
 		if 0 <= i < MapSize:
 			b = self.map[i]
@@ -519,7 +528,8 @@ class MapInfo(object):
 			self.updatetime[i] = 0
 			self.buildstate[i] = 1
 			self.attacks[i] = []
-			self.doubleinfo[i] = DoubleItem()
+			self.doubleinfo[i] = EffectItem()
+			self.protectinfo[i] = EffectItem()
 			return True
 		return False
 
@@ -566,6 +576,34 @@ class MapInfo(object):
 					self.doubleinfo[i].validtime = cfg['doubletime']
 				return True
 		return False
+
+	def getProtect(self, i):
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			if b > 0 and l > 0:
+				self.delAttack(i)
+				logger.info("aaaaaaaaaaaaaa:%s", self.attacks[i])
+				if len(self.attacks[i]) <= 0:
+					return buildinglevelcfg[b][l]['protectcost']
+		return 0
+
+
+	def protect(self, i):
+		if 0 <= i < MapSize:
+			b = self.map[i]
+			l = self.buildlevel[i]
+			if b > 0 and l > 0:
+				cfg = buildinglevelcfg[b][l]
+				#logger.info("aaaaaaaaaaaaaa:%s", self.doubleinfo[i].valid())
+				if self.protectinfo[i].valid():
+					self.protectinfo[i].validtime += cfg['protecttime']
+				else:
+					self.protectinfo[i].begintime = time.time()
+					self.protectinfo[i].validtime = cfg['protecttime']
+				return True
+		return False
+
 
 
 	def getDoubleNum(self, i, tm):
@@ -623,7 +661,9 @@ class MapInfo(object):
 
 		return {'gen':ret, 'genflag':retflag, 'attackpoint': attackpoint, 'buildstate': self.buildstate[i],
 			'updatetime': self.updatetime[i],
-			'attacks':self.getAttackDict(i), 'doubleinfo': self.doubleinfo[i].todict(),
+			'attacks':self.getAttackDict(i), 
+			'doubleinfo': self.doubleinfo[i].todict(),
+			'protectinfo': self.protectinfo[i].todict(),
 			'servertime': time.time(),
 		}
 
